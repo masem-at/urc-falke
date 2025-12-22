@@ -680,6 +680,111 @@ export const cookieOptions = {
 
 ---
 
+#### Onboarding Token Authentication (Two-Track Onboarding)
+
+**Decision:** Two-Track Onboarding System für Existing vs New Members
+
+**Rationale:**
+- **Existing Members (Pre-Seeded):** Receive personalized QR code/key in Postwurfsendung → Token-based auto-login → Force password change → Minimal profile completion → DONE in <15 seconds
+- **New Members:** Receive generic QR code/link → Standard registration → DONE in <30 seconds
+- **Benefits:** Reduced friction for existing members, faster onboarding, better user experience
+
+**Architecture Components:**
+
+1. **Pre-Seed CLI Tool** (`pnpm seed:members`)
+   - Imports CSV with existing member data (`email`, `first_name`, `last_name`, `usv_number`)
+   - Generates unique 16-character alphanumeric `onboarding_token` per member
+   - Sets `onboarding_token_expires` to 90 days from generation
+   - Creates temporary password (user must change on first login)
+   - Sets `onboarding_status: 'pre_seeded'`, `must_change_password: true`
+   - Outputs CSV with QR code URLs for print service
+
+2. **Database Schema Extensions** (added to `users` table):
+   ```typescript
+   export const users = pgTable('users', {
+     // ... existing fields
+     onboarding_token: text('onboarding_token').unique(),
+     onboarding_token_expires: timestamp('onboarding_token_expires'),
+     onboarding_status: text('onboarding_status').$type<'pre_seeded' | 'password_changed' | 'completed'>(),
+     must_change_password: boolean('must_change_password').default(false),
+   });
+   ```
+
+3. **API Endpoints:**
+   - `POST /api/v1/auth/onboard-existing` - Token-based auto-login for pre-seeded users
+   - `POST /api/v1/auth/register` - Standard registration for new members
+   - `POST /api/v1/users/me/set-password` - Force password change (post-token-login)
+   - `PATCH /api/v1/users/me/complete-profile` - Minimal profile completion
+
+4. **Onboarding Flows:**
+
+   **Flow A: Existing Member (Pre-Seeded)**
+   ```
+   QR Scan → /onboard-existing?token=xxx
+   ↓
+   Token Validation (check: exists, not expired, status='pre_seeded')
+   ↓
+   Auto-Login (generate JWT, set HttpOnly cookie)
+   ↓
+   Redirect to /onboard-existing/set-password
+   ↓
+   User sets new password → status='password_changed'
+   ↓
+   Redirect to /profile/complete (minimal: confirm name, phone optional)
+   ↓
+   status='completed' → Redirect to /events (DONE in <15s)
+   ```
+
+   **Flow B: New Member**
+   ```
+   QR Scan → /register
+   ↓
+   Registration Form (email, password, optional USV number)
+   ↓
+   Create user → status='completed' (no pre-seeding)
+   ↓
+   Auto-Login → Redirect to /events (DONE in <30s)
+   ```
+
+5. **Token Security:**
+   - **Single-Use:** After successful login, `onboarding_token` is cleared
+   - **Time-Limited:** 90-day expiration from generation
+   - **Validation:** Token must match user record, be unexpired, and status must be 'pre_seeded'
+   - **Error Handling:**
+     - Expired token → Error page with contact info
+     - Already used → Redirect to standard login page
+     - Invalid token → 404 with helpful message
+
+6. **Implementation Example:**
+   ```typescript
+   // apps/api/src/auth/onboard-existing.ts
+   export async function onboardExistingMember(token: string) {
+     const user = await db.select().from(users)
+       .where(and(
+         eq(users.onboarding_token, token),
+         gt(users.onboarding_token_expires, new Date()),
+         eq(users.onboarding_status, 'pre_seeded')
+       ))
+       .get();
+
+     if (!user) {
+       throw new Error('Invalid or expired token');
+     }
+
+     // Generate JWT and auto-login
+     const jwt = await signAccessToken({ userId: user.id, role: user.role });
+
+     return { jwt, user, redirectTo: '/onboard-existing/set-password' };
+   }
+   ```
+
+**Impact on Existing Architecture:**
+- Authentication middleware must handle `must_change_password` flag
+- Protected routes check: if `must_change_password === true`, redirect to `/onboard-existing/set-password`
+- CLI tool added to backend workspace: `apps/api/src/scripts/seed-members.ts`
+
+---
+
 #### Authorization: RBAC (Role-Based Access Control)
 
 **Decision:** RBAC mit 2 Roles (Member, Admin)

@@ -430,6 +430,49 @@ packages/shared/src/
 - **NEVER trust client-side role checks** - validate on backend
 - **Password Hashing:** ALWAYS use bcrypt with 12 rounds, NEVER plain text or MD5
 
+**Two-Track Onboarding System (CRITICAL):**
+- **Track A (Existing Members):** Pre-seeded users with personalized `onboarding_token`
+- **Track B (New Members):** Standard registration form
+- **NEVER confuse the two tracks** - they use different endpoints and flows
+- **Onboarding Token Rules:**
+  - Tokens are **single-use** - ALWAYS clear `onboarding_token` after successful login
+  - Tokens are **time-limited** - validate `onboarding_token_expires > NOW()`
+  - Tokens are **status-gated** - MUST check `onboarding_status === 'pre_seeded'` before allowing token-based login
+  - **NEVER** allow token reuse - check if already used and redirect to standard login
+- **Force Password Change Flow:**
+  - Pre-seeded users MUST change password on first login (`must_change_password: true`)
+  - **ALWAYS** check `must_change_password` flag in auth middleware
+  - **ALWAYS** redirect to `/onboard-existing/set-password` if flag is `true`
+  - **NEVER** allow access to protected routes while `must_change_password` is `true`
+- **Onboarding Status Lifecycle:**
+  ```
+  Track A: NULL → pre_seeded → password_changed → completed
+  Track B: NULL → completed (direct)
+  ```
+- **Database Fields to Check:**
+  - `onboarding_token` (text, unique, nullable)
+  - `onboarding_token_expires` (timestamp, nullable)
+  - `onboarding_status` (text: 'pre_seeded' | 'password_changed' | 'completed')
+  - `must_change_password` (boolean, default false)
+- **API Endpoint Separation:**
+  - Track A: `POST /api/v1/auth/onboard-existing` (token-based)
+  - Track B: `POST /api/v1/auth/register` (standard)
+  - **NEVER** mix authentication logic between tracks
+- **Pre-Seed CLI Tool:**
+  - Command: `pnpm seed:members --csv ./data/existing-members.csv`
+  - Generates tokens, creates pre-seeded users, outputs QR codes
+  - **ALWAYS** validate CSV format before processing (email, first_name, last_name, usv_number)
+  - **NEVER** skip duplicate email checks - log warnings for skipped entries
+- **Error Handling:**
+  - Expired token → Show error page with contact info, NOT generic 404
+  - Already used token → Redirect to `/login` with friendly message
+  - Invalid token → 404 with helpful "Check your QR code" message
+- **Testing Critical Paths:**
+  - Test token expiration edge cases (90 days)
+  - Test force password change enforcement
+  - Test single-use token enforcement (prevent replay)
+  - Test both tracks independently (no cross-contamination)
+
 **SQL Injection Prevention:**
 - **ALWAYS use Drizzle parameterized queries** - NEVER string concatenation
 - **NEVER use raw SQL** unless absolutely necessary and parameterized

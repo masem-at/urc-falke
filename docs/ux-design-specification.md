@@ -526,6 +526,203 @@ Patterns die wir direkt für **urc-falke** adaptieren können:
 - **Social SSO** (Instagram Facebook-Login) → urc-falke: "Mit USV-Nummer anmelden"
   - **Why:** Peter's Belonging (Institutional Trust), Zero Friction
 
+---
+
+### Two-Track Onboarding User Journeys
+
+**Context:** urc-falke implementiert zwei getrennte Onboarding-Flows basierend auf Member-Status - **Existing Members (Pre-Seeded)** erhalten personalisierte QR-Codes in der Postwurfsendung, **New Members** erhalten generische QR-Codes/Links.
+
+**Design Rationale:**
+- **Existing Members:** Schnellerer Flow (<15 Sek statt 30 Sek) = höhere Conversion, "Du bist bereits bekannt!"-Feeling = Peter's Belonging
+- **New Members:** Standard-Flow (30 Sek) aber immer noch ultra-schnell vs. traditionelle Vereinsregistrierung
+- **UX Benefit:** Personalisierung ohne Komplexität - System erkennt automatisch Member-Typ via Token
+
+---
+
+#### Journey A: Existing Member (Pre-Seeded) - Peter's "Wow, ich bin schon drin!"-Moment
+
+**Target Persona:** Peter (52, "Der Unsichtbare" - zahlt USV-Beitrag seit 20 Jahren)
+
+**Trigger:** Peter erhält Postwurfsendung mit **personalisierten QR-Code** + Alternativ-Key
+
+**User Flow (3 Screens, <15 Sekunden):**
+
+**Screen 1: QR-Scan / Token-Eingabe**
+```
+┌─────────────────────────────────────┐
+│ 📸 QR-Code scannen                  │
+│                                     │
+│   [QR-Scanner-Kamera-View]         │
+│                                     │
+│ ─────── ODER ──────                │
+│                                     │
+│ 🔑 Code eingeben:                  │
+│ [__________________]  [Weiter →]   │
+│                                     │
+│ "Hast du einen persönlichen Code   │
+│  in der Post erhalten? Scanne den  │
+│  QR-Code oder gib den Key ein."    │
+└─────────────────────────────────────┘
+```
+**UX Details:**
+- **Accessibility:** Große Schrift (18px), 44x44px Button, Voice-Over-Label: "QR-Code scannen oder persönlichen Code eingeben"
+- **Error States:** "Code ungültig? Kontaktiere uns: info@urc-falke.at"
+- **Auto-Login:** Nach erfolgreicher Token-Validierung → JWT Cookie gesetzt → Weiter zu Screen 2
+
+**Screen 2: Passwort festlegen (Force Password Change)**
+```
+┌─────────────────────────────────────┐
+│ Willkommen zurück, Peter! 👋        │
+│                                     │
+│ Bitte wähle ein neues Passwort     │
+│ für deinen Account.                 │
+│                                     │
+│ Neues Passwort:                    │
+│ [________________________]  👁      │
+│                                     │
+│ Passwort bestätigen:               │
+│ [________________________]  👁      │
+│                                     │
+│ ✓ Mindestens 8 Zeichen             │
+│                                     │
+│ [Passwort festlegen →]  (44x44px)  │
+└─────────────────────────────────────┘
+```
+**UX Details:**
+- **Personalization:** Name pre-filled from CSV ("Willkommen zurück, {firstName}!")
+- **Password Visibility Toggle:** Eye icon (👁) - Gerhard kann Passwort prüfen
+- **Real-Time Validation:** Checkmark (✓) erscheint wenn 8+ Zeichen
+- **Accessibility:** Screen-Reader announces "Passwort muss mindestens 8 Zeichen haben"
+
+**Screen 3: Profil prüfen (Minimal Completion)**
+```
+┌─────────────────────────────────────┐
+│ 🎉 Fast geschafft!                  │
+│                                     │
+│ Prüfe kurz deine Daten:             │
+│                                     │
+│ Vorname:                           │
+│ [Peter________________] (pre-filled)│
+│                                     │
+│ Nachname:                          │
+│ [Müller_______________] (pre-filled)│
+│                                     │
+│ Telefon (optional):                │
+│ [______________________]            │
+│                                     │
+│ □ USV-Mitglied: USV123456 ✓       │
+│   (bereits verifiziert)             │
+│                                     │
+│ [Profil abschließen →]  (44x44px)  │
+└─────────────────────────────────────┘
+```
+**UX Details:**
+- **Pre-filled Fields:** Name + USV-Nummer aus CSV → nur prüfen, nicht neu eingeben
+- **Optional Phone:** Niedrigschwellig, kann übersprungen werden
+- **USV Badge:** Grüner Checkmark (✓) = "GRATIS!"-Status sofort sichtbar
+- **Success Animation:** Nach Klick → Konfetti (opt-out in settings) + Redirect zu /events
+
+**Total Journey Time:** **<15 Sekunden** (QR-Scan 3s + Passwort 8s + Profil-Check 4s)
+
+**Emotional Arc:**
+1. **Curiosity** (QR-Scan): "Was ist das?"
+2. **Surprise** (Willkommen-Screen): "Die kennen mich schon?!"
+3. **Delight** (Success): "Das war einfacher als WhatsApp!" → Peter's Make-or-Break erfüllt
+
+---
+
+#### Journey B: New Member - Lisa's "<30 Sek oder ich bin weg"-Challenge
+
+**Target Persona:** Lisa (38, "Die Spontane" - technikaffin, Consumer-Grade-Erwartung)
+
+**Trigger:** Lisa sieht **generischen QR-Code** auf Plakat/Social-Media oder erhält Link von Freundin
+
+**User Flow (1 Screen, <30 Sekunden):**
+
+**Screen 1: Schnelle Registrierung**
+```
+┌─────────────────────────────────────┐
+│ Willkommen in der Falken-Familie!🚴│
+│                                     │
+│ Email:                             │
+│ [________________________]          │
+│                                     │
+│ Passwort (min. 8 Zeichen):         │
+│ [________________________]  👁      │
+│                                     │
+│ Passwort bestätigen:               │
+│ [________________________]  👁      │
+│                                     │
+│ ─────────────────────────────      │
+│                                     │
+│ ☑ Hast du eine USV-Mitgliedsnummer?│
+│                                     │
+│ USV-Nummer (optional):             │
+│ [________________] "GRATIS!"-Badge  │
+│                                     │
+│ [Jetzt dabei sein! →]  (44x44px)   │
+│                                     │
+│ Bereits Mitglied? [Anmelden]       │
+└─────────────────────────────────────┘
+```
+**UX Details:**
+- **Minimal Required Fields:** Nur 3 Pflichtfelder (Email, Passwort, Bestätigung) - Lisa's Zero-Friction-Goal
+- **USV-Nummer:** Optional, collapsed by default - Progressive Disclosure für Peter-Persona
+- **"GRATIS für USV-Mitglieder"-Badge:** Erscheint prominent wenn checkbox aktiviert
+- **Auto-Login:** Nach erfolgreicher Registration → JWT Cookie + Konfetti + Redirect zu /events
+- **Total Time:** <30 Sekunden (Lisa tippt schnell, 3 Felder, Submit, FERTIG)
+
+**Success State:**
+```
+┌─────────────────────────────────────┐
+│                                     │
+│         🎉 Geschafft! 🎉            │
+│                                     │
+│   Du bist jetzt Mitglied!          │
+│                                     │
+│   [Konfetti-Animation]             │
+│                                     │
+│   [Zu den Events →]                │
+│                                     │
+└─────────────────────────────────────┘
+```
+**Emotional Arc:**
+1. **Speed** (Form Fill): "Nur 3 Felder? Nice!"
+2. **Delight** (Konfetti): Consumer-Grade-Moment
+3. **Action** (Event-Liste): Sofort relevanter Content → Lisa meldet sich für erste Tour an
+
+---
+
+#### Design Differences: Track A vs Track B
+
+| **Aspect** | **Track A: Existing** | **Track B: New** |
+|------------|----------------------|------------------|
+| **Screens** | 3 (QR-Scan → Password → Profile) | 1 (Registration Form) |
+| **Time Goal** | <15 Sekunden | <30 Sekunden |
+| **Pre-filled Data** | Name, Email, USV-Nummer | Nichts |
+| **Personalization** | "Willkommen zurück, {Name}!" | "Willkommen in der Falken-Familie!" |
+| **USV Badge** | ✓ Bereits verifiziert (grün) | Optional eingeben, pending verification |
+| **Password Flow** | Force Change (temp password) | Set on Registration |
+| **Emotional Payoff** | "Sie kennen mich!" (Belonging) | "Das war schnell!" (Efficiency) |
+
+---
+
+#### Mobile Wireframes Considerations
+
+**Critical UX Elements (Both Tracks):**
+- **44x44px Touch-Targets:** Alle Buttons, Input-Felder min. 44px Höhe (Gerhard's Motorik)
+- **Eye-Icon Password Toggle:** Rechts in Input-Feld (Gerhard kann Passwort prüfen)
+- **Keyboard Handling:** Auto-Focus erstes Feld, `type="email"` für Email-Keyboard, `type="tel"` für Telefon
+- **Error States:** Inline-Validierung, rote Border + Error-Text unter Input (WCAG contrast 4.5:1)
+- **Loading States:** Spinner + "Einen Moment..." Text während Token-Validierung/Registration
+
+**Progressive Enhancement:**
+- **Camera Permission:** QR-Scanner fragt um Permission, Fallback: "Code manuell eingeben"
+- **Konfetti-Animation:** Deaktivierbar in Settings (Gerhard's Preference), `prefers-reduced-motion` respektiert
+- **Auto-Fill:** Browser Password-Manager supported (`autocomplete="current-password"`)
+
+---
+
 ### Anti-Patterns to Avoid
 
 Patterns die **NICHT** zu urc-falke passen:
