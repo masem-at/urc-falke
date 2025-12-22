@@ -3,7 +3,7 @@
 **Story ID:** 1.3
 **Story Key:** 1-3-user-login-and-session-management
 **Epic:** Epic 1 - User Onboarding & Authentication
-**Status:** review
+**Status:** done
 
 ---
 
