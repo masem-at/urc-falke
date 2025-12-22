@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(bmad:bmm:workflows:workflow-init)",
+      "Skill(bmad:core:workflows:party-mode)",
+      "Bash(\".claude/hooks/bmad-speak.sh\" \"Sally\" \"Oh Mario, ich LIEBE was du hier machst! Accessibility-First ist nicht nur ein Feature - es IST die Foundation. Und das QR-Code Onboarding? Chef''s kiss. Lass mich dir sagen warum das brillant ist: Du triffst ältere Mitglieder dort, wo sie Hilfe brauchen, WÄHREND du die 30-50-Jährigen mit dem modernen, friktionslosen Scan-and-go begeisterst. Das ist generationsübergreifendes Design vom Feinsten!\")",
+      "Skill(bmad:bmm:workflows:create-prd)",
+      "Skill(bmad:bmm:workflows:create-ux-design)",
+      "Bash(test:*)",
+      "Skill(bmad:bmm:workflows:create-architecture)",
+      "WebSearch",
+      "Bash(git add:*)"
+    ]
+  }
+}
