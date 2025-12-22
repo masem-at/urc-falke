@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "turbo run build --filter=web",
-  "devCommand": "turbo run dev --filter=web",
+  "buildCommand": "turbo run build --filter=@urc-falke/web",
+  "devCommand": "turbo run dev --filter=@urc-falke/web",
   "installCommand": "pnpm install",
   "framework": null,
   "outputDirectory": "apps/web/dist",
