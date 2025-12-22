@@ -3,7 +3,7 @@
 **Story ID:** 1.2
 **Story Key:** 1-2-user-registration-with-email-and-password
 **Epic:** Epic 1 - User Onboarding & Authentication
-**Status:** ready-for-dev
+**Status:** done
 
 ---
 
