@@ -1,15 +1,8 @@
 import { defineConfig } from 'vitest/config';
-import { resolve } from 'path';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      '@urc-falke/shared': resolve(__dirname, '../../packages/shared/src/index.ts'),
-      '@urc-falke/shared/db': resolve(__dirname, '../../packages/shared/src/db/index.ts'),
-      '@urc-falke/shared/types': resolve(__dirname, '../../packages/shared/src/types/index.ts'),
-      '@urc-falke/shared/schemas': resolve(__dirname, '../../packages/shared/src/schemas/auth.schema.ts')
-    }
-  },
+  plugins: [tsconfigPaths()],
   test: {
     environment: 'node',
     globals: true,
