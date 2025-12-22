@@ -1,4 +1,4 @@
-import { LoginPage } from './routes';
+import { LoginPage, OnboardTokenPage, SetPasswordPage, CompleteProfilePage } from './routes';
 
 // ============================================================================
 // APP COMPONENT (Simple URL-based Routing)
@@ -6,9 +6,12 @@ import { LoginPage } from './routes';
 //
 // ARCHITECTURE NOTE: Simple routing until TanStack Router is fully configured
 // - /login: Login page
+// - /einladung/:token: QR code onboarding (Track A)
+// - /onboard-existing/set-password: Password setting (Track A)
+// - /onboard-existing/complete-profile: Profile completion (Track A)
 // - /: Home page (shows welcome message)
 //
-// TODO: Replace with TanStack Router file-based routing in Story 1.4+
+// TODO: Replace with TanStack Router file-based routing in future stories
 //
 // ============================================================================
 
@@ -18,6 +21,21 @@ export function App() {
   // Login page
   if (path === '/login') {
     return <LoginPage />;
+  }
+
+  // Onboard token page (Track A: QR code scan)
+  if (path.startsWith('/einladung/')) {
+    return <OnboardTokenPage />;
+  }
+
+  // Set password page (Track A: after QR scan)
+  if (path === '/onboard-existing/set-password') {
+    return <SetPasswordPage />;
+  }
+
+  // Complete profile page (Track A: final step)
+  if (path === '/onboard-existing/complete-profile') {
+    return <CompleteProfilePage />;
   }
 
   // Home page (default)
@@ -31,7 +49,7 @@ export function App() {
           USV Falkensteiner Radclub Event-Management PWA
         </p>
         <p className="text-sm text-gray-500 mt-4">
-          Story 1.3 - User Login & Session Management
+          Story 1.4a - QR-Code Onboarding für bestehende Mitglieder
         </p>
         <div className="mt-6">
           <a

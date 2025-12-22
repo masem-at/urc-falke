@@ -152,4 +152,68 @@ export const authApi = {
       method: 'GET',
     });
   },
+
+  /**
+   * Onboard existing member with QR code token (Track A)
+   * Sets JWT cookie automatically
+   */
+  onboardExisting: (token: string): Promise<OnboardExistingResponse> => {
+    return apiFetch<OnboardExistingResponse>('/api/v1/auth/onboard-existing', {
+      method: 'POST',
+      body: JSON.stringify({ token }),
+    });
+  },
+};
+
+// ============================================================================
+// USER API (Profile and Password Management)
+// ============================================================================
+
+export interface SetPasswordInput {
+  password: string;
+}
+
+export interface SetPasswordResponse {
+  user: UserResponse;
+  redirectTo: string;
+}
+
+export interface CompleteProfileInput {
+  firstName?: string;
+  lastName?: string;
+  profileImageUrl?: string;
+}
+
+export interface CompleteProfileResponse {
+  user: UserResponse;
+  showConfetti: boolean;
+}
+
+export interface OnboardExistingResponse {
+  user: UserResponse;
+  redirectTo: string;
+}
+
+export const userApi = {
+  /**
+   * Set password for Track A user during onboarding
+   * Requires authentication (even with must_change_password=true)
+   */
+  setPassword: (input: SetPasswordInput): Promise<SetPasswordResponse> => {
+    return apiFetch<SetPasswordResponse>('/api/v1/users/me/set-password', {
+      method: 'PUT',
+      body: JSON.stringify(input),
+    });
+  },
+
+  /**
+   * Complete profile for Track A user during onboarding
+   * Requires authentication
+   */
+  completeProfile: (input: CompleteProfileInput): Promise<CompleteProfileResponse> => {
+    return apiFetch<CompleteProfileResponse>('/api/v1/users/me/complete-profile', {
+      method: 'PUT',
+      body: JSON.stringify(input),
+    });
+  },
 };
