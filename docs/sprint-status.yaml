@@ -1,0 +1,78 @@
+project: urc-falke
+sprint: Sprint 1 - User Onboarding & Authentication Foundation
+status: in-progress
+start_date: 2025-12-22
+last_updated: 2025-12-22
+
+epics:
+  - id: epic-1
+    name: "Epic 1 - User Onboarding & Authentication"
+    status: in-progress
+    stories:
+      - id: 1-0
+        key: 1-0-pre-seed-existing-urc-falke-members-admin-tool
+        name: "Pre-Seed Existing URC Falke Members (Admin Tool)"
+        status: ready-for-dev
+        assigned_to: null
+
+      - id: 1-1
+        key: 1-1-monorepo-foundation-and-basic-user-schema
+        name: "Monorepo Foundation & Basic User Schema"
+        status: review
+        assigned_to: Claude Sonnet 4.5
+        completed_date: 2025-12-22
+        notes: |
+          All 10 tasks completed:
+          - Turborepo monorepo initialized with 4 workspaces
+          - Frontend (apps/web): Vite 5 + React 18 + TypeScript configured
+          - Backend (apps/api): Express + TypeScript configured
+          - Shared package: Complete users schema with ALL 17 columns
+          - UI package: Radix UI wrapper structure created
+          - TypeScript project references configured
+          - Drizzle ORM + NeonDB connection setup
+          - Migration configuration ready (drizzle.config.ts)
+          - Testing infrastructure with Vitest
+          - Complete documentation (README.md)
+
+          User needs to:
+          1. Run pnpm install
+          2. Configure DATABASE_URL in apps/api/.env
+          3. Run pnpm db:generate && pnpm db:push
+          4. Run pnpm turbo dev
+
+      - id: 1-2
+        key: 1-2-user-registration-track-b-new-members
+        name: "User Registration (Track B: New Members)"
+        status: ready-for-dev
+        assigned_to: null
+
+      - id: 1-3
+        key: 1-3-standard-login-flow
+        name: "Standard Login Flow"
+        status: pending
+        assigned_to: null
+
+      - id: 1-4a
+        key: 1-4a-qr-code-auto-login-track-a-existing-members
+        name: "QR Code Auto-Login (Track A: Existing Members)"
+        status: pending
+        assigned_to: null
+
+      - id: 1-4b
+        key: 1-4b-force-password-change-flow-track-a
+        name: "Force Password Change Flow (Track A)"
+        status: pending
+        assigned_to: null
+
+      - id: 1-5
+        key: 1-5-profile-completion-flow
+        name: "Profile Completion Flow"
+        status: pending
+        assigned_to: null
+
+notes: |
+  Story 1.1 (Monorepo Foundation) completed successfully.
+  All infrastructure is in place for subsequent stories.
+  Database schema includes all fields needed for Two-Track Onboarding.
+
+  Next recommended story: Either 1.0 (Pre-Seed CLI) or 1.2 (Registration)

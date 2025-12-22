@@ -11,7 +11,10 @@
       "WebSearch",
       "Bash(git add:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial project setup: BMM methodology and complete planning phase\n\nAdd comprehensive project foundation for urc-falke PWA:\n\nPlanning Phase Deliverables:\n- Product Requirements Document \\(PRD\\) with 71 functional requirements\n- UX Design Specification with complete design system\n- Architecture Decision Document \\(3536 lines\\) with validated tech stack\n- Project Context \\(656 lines\\) with 100+ critical implementation rules\n\nArchitecture Highlights:\n- Tech Stack: Turborepo + Vite + React 18 + TypeScript 5 + PostgreSQL 16\n- State Management: TanStack Query 5.90.12 + Zustand 5.0.9 \\(PWA offline-first\\)\n- Authentication: JWT in HttpOnly cookies \\(DSGVO-compliant\\)\n- UI: Radix UI Primitives + Tailwind CSS \\(WCAG 2.1 AA\\)\n- Deployment: Vercel Serverless\n\nBMM Methodology Setup:\n- Complete workflow configurations for Analysis, Planning, Solutioning\n- Agent personas \\(Analyst, Architect, PM, UX Designer, Dev, SM, TEA\\)\n- Test Architecture workflows \\(Framework, CI, Automate, ATDD, NFR\\)\n\nProject Context \\(Critical Rules\\):\n- 15 conflict points addressed \\(naming, state boundaries, patterns\\)\n- Security rules \\(JWT, SQL injection, XSS, DSGVO compliance\\)\n- Framework-specific patterns \\(React, TanStack Query, Drizzle ORM\\)\n- PWA offline-first patterns \\(Service Worker, IndexedDB, Background Sync\\)\n- German localization requirements \\(DD.MM.YYYY dates, German error messages\\)\n\nReady for Implementation Phase: Create Epics & Stories\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(.claude/hooks/bmad-speak.sh:*)",
+      "Bash(dir:*)",
+      "Bash(tree:*)"
     ]
   }
 }

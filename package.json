@@ -1,0 +1,23 @@
+{
+  "name": "urc-falke",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:watch": "turbo run test -- --watch",
+    "lint": "turbo run lint",
+    "db:generate": "cd apps/api && pnpm drizzle-kit generate",
+    "db:push": "cd apps/api && pnpm drizzle-kit push",
+    "db:migrate": "cd apps/api && pnpm drizzle-kit migrate"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}

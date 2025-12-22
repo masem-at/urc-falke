@@ -1,0 +1,113 @@
+# generated: 2025-12-22
+# project: urc-falke
+# project_key: urc-falke
+# tracking_system: file-system
+# story_location: C:\Users\mario\Sources\dev\urc-falke\docs\sprint-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - drafted: Story file created in stories folder
+#   - ready-for-dev: Draft approved, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - completed: Retrospective has been done
+#
+# WORKFLOW NOTES:
+# ===============
+# - Mark epic as 'in-progress' when starting work on its first story
+# - SM typically drafts next story ONLY after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
+
+generated: 2025-12-22
+project: urc-falke
+project_key: urc-falke
+tracking_system: file-system
+story_location: C:\Users\mario\Sources\dev\urc-falke\docs\sprint-artifacts
+
+development_status:
+  epic-1: in-progress
+  1-0-pre-seed-existing-urc-falke-members-admin-tool: ready-for-dev
+  1-1-monorepo-foundation-and-basic-user-schema: ready-for-dev
+  1-2-user-registration-with-email-and-password: backlog
+  1-3-user-login-and-session-management: backlog
+  1-4a-qr-code-onboarding-for-existing-members-token-based-auto-login: backlog
+  1-4b-qr-code-onboarding-for-new-members-registration: backlog
+  1-5-usv-mitgliedsnummer-verification: backlog
+  1-6-user-profile-management: backlog
+  1-7-password-reset-flow: backlog
+  1-8-account-deletion-dsgvo: backlog
+  1-9-gruendungsmitglied-badge-and-lostopf: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-event-database-schema-and-basic-event-listing: backlog
+  2-2-event-details-view: backlog
+  2-3-event-registration-5-klicks: backlog
+  2-4-event-cancellation-unregister: backlog
+  2-5-event-participant-list-social-proof: backlog
+  2-6-calendar-export-ical: backlog
+  2-7-past-events-archive: backlog
+  2-8-weather-warnings: backlog
+  2-9-event-reminders: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-admin-role-setup-and-admin-dashboard-foundation: backlog
+  3-2-admin-creates-events: backlog
+  3-3-admin-edits-and-deletes-events: backlog
+  3-4-audit-logging-system: backlog
+  3-5-activity-tracking-and-member-statistics: backlog
+  3-6-event-analytics-and-engagement-metrics: backlog
+  3-7-event-statistics-export-csv-pdf: backlog
+  3-8-user-role-management-rbac: backlog
+  3-9-dsgvo-data-export: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-falki-chat-ui-foundation: backlog
+  4-2-claude-haiku-api-integration: backlog
+  4-3-event-q-and-a-via-falki: backlog
+  4-4-event-registration-via-falki: backlog
+  4-5-usv-mitgliedschafts-infos-via-falki: backlog
+  4-6-interaction-logging-and-analytics: backlog
+  4-7-voice-input-support: backlog
+  4-8-admin-prompt-management-and-fallback-links: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-photo-upload-foundation: backlog
+  5-2-event-photo-gallery: backlog
+  5-3-photo-interactions-comments-and-likes: backlog
+  5-4-tour-reports-write-and-view: backlog
+  5-5-social-media-sharing: backlog
+  5-6-event-history-and-frequent-riders: backlog
+  5-7-admin-content-moderation: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-email-service-foundation: backlog
+  6-2-transactional-emails: backlog
+  6-3-newsletter-preferences: backlog
+  6-4-admin-event-announcements: backlog
+  6-5-in-app-notifications: backlog
+  epic-6-retrospective: optional
+
+  epic-7: backlog
+  7-1-stripe-payment-integration: backlog
+  7-2-recurring-donations: backlog
+  7-3-anonymous-donations: backlog
+  7-4-thank-you-email: backlog
+  7-5-tax-deductible-donation-receipts: backlog
+  7-6-admin-fundraising-dashboard: backlog
+  epic-7-retrospective: optional

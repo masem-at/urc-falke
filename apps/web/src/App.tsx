@@ -1,0 +1,17 @@
+export function App() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold text-primary-700 mb-4">
+          URC Falke
+        </h1>
+        <p className="text-gray-600">
+          USV Falkensteiner Radclub Event-Management PWA
+        </p>
+        <p className="text-sm text-gray-500 mt-4">
+          Monorepo Foundation - Story 1.1 Complete
+        </p>
+      </div>
+    </div>
+  );
+}
