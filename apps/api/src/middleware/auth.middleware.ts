@@ -14,7 +14,8 @@ import { eq } from 'drizzle-orm';
 //
 // CRITICAL: requireAuth MUST check must_change_password flag in DB
 // - If true, return 403 with redirect to /onboard-existing/set-password
-// - Frontend intercepts this and redirects user
+// - EXCEPTION: /api/v1/users/me/set-password is allowed (for setting new password)
+// - Frontend intercepts 403 and redirects user
 //
 // SECURITY NOTES:
 // - JWT stored in HttpOnly cookie (not accessible to JavaScript)
@@ -97,7 +98,10 @@ export async function requireAuth(
     }
 
     // 4. CRITICAL: Block access if password change required (Track A users)
-    if (dbUser.must_change_password) {
+    // EXCEPTION: Allow access to /api/v1/users/me/set-password endpoint
+    const isSetPasswordRoute = req.path === '/api/v1/users/me/set-password';
+
+    if (dbUser.must_change_password && !isSetPasswordRoute) {
       res.status(403).json({
         type: 'https://urc-falke.app/errors/password-change-required',
         title: 'Passwortänderung erforderlich',
