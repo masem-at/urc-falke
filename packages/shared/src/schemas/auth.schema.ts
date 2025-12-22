@@ -64,3 +64,14 @@ export const completeProfileSchema = z.object({
 });
 
 export type CompleteProfileInput = z.infer<typeof completeProfileSchema>;
+
+// ============================================================================
+// USV VERIFICATION SCHEMA
+// ============================================================================
+
+export const usvVerifySchema = z.object({
+  usvNumber: z.string()
+    .regex(/^USV[0-9]{6}$/, 'USV-Nummer muss im Format USV123456 sein')
+});
+
+export type USVVerifyInput = z.infer<typeof usvVerifySchema>;

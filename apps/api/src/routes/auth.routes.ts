@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import { validate } from '../middleware/validate.middleware.js';
-import { authRateLimiter } from '../middleware/rate-limit.middleware.js';
+import { authRateLimiter, usvVerifyRateLimiter } from '../middleware/rate-limit.middleware.js';
 import { requireAuth } from '../middleware/auth.middleware.js';
-import { signupSchema, loginSchema, onboardExistingSchema } from '@urc-falke/shared';
+import { signupSchema, loginSchema, onboardExistingSchema, usvVerifySchema } from '@urc-falke/shared';
 import { registerUser, loginUser, onboardExistingUser, type ProblemDetails } from '../services/auth.service.js';
+import { verifyUSVNumber } from '../services/usv-verification.service.js';
 import type { Request, Response, NextFunction } from 'express';
 
 // ============================================================================
@@ -257,6 +258,72 @@ router.post(
       if (error && typeof error === 'object' && 'status' in error) {
         const problemDetails = error as ProblemDetails;
         res.status(problemDetails.status).json(problemDetails);
+        return;
+      }
+
+      // Unexpected error - pass to error middleware
+      next(error);
+    }
+  }
+);
+
+/**
+ * POST /api/v1/usv/verify
+ *
+ * Verify a USV membership number via external USV API
+ *
+ * Request Body:
+ *   - usvNumber: string (format: USV123456)
+ *
+ * Success Response (200 OK):
+ *   {
+ *     "valid": true,
+ *     "memberSince": "2018-01-15"
+ *   }
+ *
+ * Error Responses:
+ *   - 400: Validation error (invalid format)
+ *   - 401: Unauthorized (no valid JWT)
+ *   - 429: Rate limit exceeded (5 requests/minute)
+ *   - 500: Internal server error
+ *   - 503: USV API unavailable
+ */
+router.post(
+  '/api/v1/usv/verify',
+  usvVerifyRateLimiter, // Rate limiting: 5 req/min
+  requireAuth, // Require authentication
+  validate(usvVerifySchema), // Validate USV number format
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      // Get authenticated user ID from JWT
+      if (!req.user?.id) {
+        res.status(401).json({
+          type: 'https://urc-falke.app/errors/unauthorized',
+          title: 'Nicht autorisiert',
+          status: 401,
+          detail: 'Authentifizierung erforderlich',
+          instance: req.originalUrl
+        });
+        return;
+      }
+
+      // Verify USV number and update database
+      const result = await verifyUSVNumber(req.body.usvNumber, req.user.id);
+
+      res.status(200).json(result);
+    } catch (error) {
+      // Handle verification errors
+      if (error instanceof Error) {
+        // Map errors to appropriate status codes
+        const status = error.message.includes('timeout') ? 504 : 503;
+
+        res.status(status).json({
+          type: 'https://urc-falke.app/errors/usv-verification-failed',
+          title: 'USV-Verifizierung fehlgeschlagen',
+          status,
+          detail: error.message,
+          instance: req.originalUrl
+        });
         return;
       }
 

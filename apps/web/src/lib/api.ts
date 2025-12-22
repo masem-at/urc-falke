@@ -217,3 +217,26 @@ export const userApi = {
     });
   },
 };
+
+// ============================================================================
+// USV VERIFICATION API
+// ============================================================================
+
+export interface USVVerificationResponse {
+  valid: boolean;
+  memberSince?: string;
+}
+
+export const usvApi = {
+  /**
+   * Verify a USV membership number
+   * Requires authentication
+   * Rate limited: 5 requests per minute
+   */
+  verify: (usvNumber: string): Promise<USVVerificationResponse> => {
+    return apiFetch<USVVerificationResponse>('/api/v1/usv/verify', {
+      method: 'POST',
+      body: JSON.stringify({ usvNumber }),
+    });
+  },
+};
