@@ -41,7 +41,9 @@
       "Bash(curl:*)",
       "Bash(grep:*)",
       "Skill(bmad:bmm:workflows:code-review)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(ls:*)",
+      "Skill(bmad:bmm:workflows:create-story)"
     ]
   }
 }
