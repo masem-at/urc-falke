@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { registerUser, loginUser } from './auth.service';
-import type { SignupInput, LoginInput } from '@urc-falke/shared';
+import { registerUser, loginUser, onboardExistingUser } from './auth.service';
+import type { SignupInput, LoginInput, OnboardExistingInput } from '@urc-falke/shared';
 import * as passwordModule from '../lib/password';
 import * as jwtModule from '../lib/jwt';
 import * as dbModule from '../db/connection';
@@ -619,6 +619,250 @@ describe('Login Service', () => {
       const result = await loginUser(input);
 
       expect(result.mustChangePassword).toBe(false);
+    });
+  });
+});
+
+// ============================================================================
+// ONBOARD EXISTING USER SERVICE TESTS (Track A: Token-Based Auto-Login)
+// ============================================================================
+//
+// NOTE: These are unit tests with mocked database operations
+// Tests cover: valid token login, token not found, token expired,
+// token already used (status !== 'pre_seeded')
+//
+// ============================================================================
+
+describe('Onboard Existing User Service', () => {
+  describe('onboardExistingUser', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('should successfully auto-login with valid onboarding token', async () => {
+      const input: OnboardExistingInput = {
+        token: 'valid-onboarding-token-123'
+      };
+
+      // Mock: Valid pre-seeded user found with unexpired token
+      const futureDate = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000); // 90 days from now
+      const mockSelect = {
+        from: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue([{
+          id: 42,
+          email: 'preseeded@example.com',
+          password_hash: '$2b$12$hashedPassword',
+          first_name: 'Max',
+          last_name: 'Mustermann',
+          usv_number: 'USV123456',
+          role: 'member',
+          onboarding_status: 'pre_seeded',
+          onboarding_token: 'valid-onboarding-token-123',
+          onboarding_token_expires: futureDate,
+          must_change_password: true,
+          is_founding_member: true,
+          is_usv_verified: false,
+          profile_image_url: null,
+          lottery_registered: false,
+          created_at: new Date(),
+          updated_at: new Date()
+        }])
+      };
+
+      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
+
+      const result = await onboardExistingUser(input);
+
+      // Verify JWT was generated
+      expect(jwtModule.signAccessToken).toHaveBeenCalledWith({
+        userId: 42,
+        role: 'member'
+      });
+
+      // Verify result
+      expect(result.user.id).toBe(42);
+      expect(result.user.email).toBe('preseeded@example.com');
+      expect(result.user.first_name).toBe('Max');
+      expect(result.accessToken).toBe('mock.jwt.token');
+      expect(result.redirectTo).toBe('/onboard-existing/set-password');
+
+      // SECURITY: password_hash should NOT be in response
+      expect((result.user as any).password_hash).toBeUndefined();
+    });
+
+    it('should throw 404 when token does not exist', async () => {
+      const input: OnboardExistingInput = {
+        token: 'nonexistent-token'
+      };
+
+      const mockSelect = {
+        from: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue([]) // No user found
+      };
+
+      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+
+      await expect(onboardExistingUser(input)).rejects.toMatchObject({
+        status: 404,
+        title: 'Token nicht gefunden',
+        type: 'https://urc-falke.app/errors/token-not-found'
+      });
+    });
+
+    it('should throw 410 when token is expired', async () => {
+      const input: OnboardExistingInput = {
+        token: 'expired-token'
+      };
+
+      // Mock: User found but token is expired
+      const pastDate = new Date(Date.now() - 1000); // 1 second ago
+      const mockSelect = {
+        from: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue([{
+          id: 1,
+          email: 'expired@example.com',
+          password_hash: '$2b$12$hashedPassword',
+          onboarding_status: 'pre_seeded',
+          onboarding_token: 'expired-token',
+          onboarding_token_expires: pastDate, // EXPIRED
+          must_change_password: true
+        }])
+      };
+
+      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+
+      await expect(onboardExistingUser(input)).rejects.toMatchObject({
+        status: 410,
+        title: 'Token abgelaufen',
+        type: 'https://urc-falke.app/errors/token-expired'
+      });
+    });
+
+    it('should throw 409 when token is already used (onboarding_status !== pre_seeded)', async () => {
+      const input: OnboardExistingInput = {
+        token: 'used-token'
+      };
+
+      // Mock: User found but status is not 'pre_seeded' (already activated)
+      const futureDate = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
+      const mockSelect = {
+        from: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue([{
+          id: 1,
+          email: 'activated@example.com',
+          password_hash: '$2b$12$hashedPassword',
+          onboarding_status: 'password_changed', // NOT 'pre_seeded'
+          onboarding_token: 'used-token',
+          onboarding_token_expires: futureDate,
+          must_change_password: false
+        }])
+      };
+
+      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+
+      await expect(onboardExistingUser(input)).rejects.toMatchObject({
+        status: 409,
+        title: 'Account bereits aktiviert',
+        type: 'https://urc-falke.app/errors/token-already-used'
+      });
+    });
+
+    it('should throw 409 when onboarding_status is completed', async () => {
+      const input: OnboardExistingInput = {
+        token: 'completed-user-token'
+      };
+
+      const futureDate = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
+      const mockSelect = {
+        from: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue([{
+          id: 1,
+          email: 'completed@example.com',
+          password_hash: '$2b$12$hashedPassword',
+          onboarding_status: 'completed', // Fully completed
+          onboarding_token: 'completed-user-token',
+          onboarding_token_expires: futureDate,
+          must_change_password: false
+        }])
+      };
+
+      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+
+      await expect(onboardExistingUser(input)).rejects.toMatchObject({
+        status: 409,
+        title: 'Account bereits aktiviert'
+      });
+    });
+
+    it('should never return password_hash in response', async () => {
+      const input: OnboardExistingInput = {
+        token: 'valid-token'
+      };
+
+      const futureDate = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
+      const mockSelect = {
+        from: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue([{
+          id: 1,
+          email: 'test@example.com',
+          password_hash: '$2b$12$verySecretHash', // Should be removed
+          first_name: 'Max',
+          last_name: 'Mustermann',
+          role: 'member',
+          onboarding_status: 'pre_seeded',
+          onboarding_token: 'valid-token',
+          onboarding_token_expires: futureDate,
+          must_change_password: true
+        }])
+      };
+
+      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
+
+      const result = await onboardExistingUser(input);
+
+      // SECURITY CHECK: password_hash should NOT be in response
+      expect((result.user as any).password_hash).toBeUndefined();
+      expect(Object.keys(result.user)).not.toContain('password_hash');
+    });
+
+    it('should generate JWT token with correct payload', async () => {
+      const input: OnboardExistingInput = {
+        token: 'valid-token'
+      };
+
+      const futureDate = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
+      const mockSelect = {
+        from: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue([{
+          id: 99,
+          email: 'admin@example.com',
+          password_hash: '$2b$12$hashedPassword',
+          role: 'admin',
+          onboarding_status: 'pre_seeded',
+          onboarding_token: 'valid-token',
+          onboarding_token_expires: futureDate,
+          must_change_password: true
+        }])
+      };
+
+      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
+
+      await onboardExistingUser(input);
+
+      expect(jwtModule.signAccessToken).toHaveBeenCalledWith({
+        userId: 99,
+        role: 'admin'
+      });
     });
   });
 });

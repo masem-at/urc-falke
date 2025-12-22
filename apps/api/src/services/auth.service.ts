@@ -2,7 +2,7 @@ import { db } from '../db/connection.js';
 import { users, type User } from '@urc-falke/shared/db';
 import { hashPassword, verifyPassword } from '../lib/password.js';
 import { signAccessToken } from '../lib/jwt.js';
-import type { SignupInput, LoginInput } from '@urc-falke/shared';
+import type { SignupInput, LoginInput, OnboardExistingInput } from '@urc-falke/shared';
 import { eq } from 'drizzle-orm';
 
 // ============================================================================
@@ -190,5 +190,106 @@ export async function loginUser(input: LoginInput): Promise<LoginResult> {
     user: userWithoutPassword,
     accessToken,
     mustChangePassword: existingUser.must_change_password ?? false
+  };
+}
+
+// ============================================================================
+// ONBOARD EXISTING USER SERVICE (Track A: Token-Based Auto-Login)
+// ============================================================================
+//
+// ARCHITECTURE NOTE: This is Track A onboarding for pre-seeded members
+// - Pre-seeded users have an onboarding_token from QR code (generated in Story 1.0)
+// - Token is single-use, time-limited (90 days), and status-gated
+// - After successful token validation, user is auto-logged in
+// - User MUST change password before accessing protected routes
+//
+// SECURITY NOTES:
+// - Token validated against: existence, expiration, status
+// - JWT generated with 15-minute expiry (same as login)
+// - password_hash NEVER returned in response
+// - Token is NOT cleared here - it's cleared in set-password step
+//
+// ============================================================================
+
+/**
+ * Onboard existing result containing user, access token, and redirect path
+ */
+export interface OnboardExistingResult {
+  user: UserResponse;
+  accessToken: string;
+  redirectTo: string;
+}
+
+/**
+ * Onboard an existing member using their QR code token (Track A)
+ *
+ * @param input - Onboard data (token from QR code)
+ * @returns Promise<OnboardExistingResult> - User object, JWT, and redirect path
+ * @throws ProblemDetails if token is invalid (404), expired (410), or already used (409)
+ *
+ * Token Validation Rules:
+ * 1. Token must exist in database (onboarding_token field)
+ * 2. Token must not be expired (onboarding_token_expires > NOW())
+ * 3. User must have onboarding_status === 'pre_seeded'
+ *
+ * @example
+ * const result = await onboardExistingUser({
+ *   token: 'abc123-unique-token'
+ * });
+ * // Returns: { user, accessToken, redirectTo: '/onboard-existing/set-password' }
+ */
+export async function onboardExistingUser(input: OnboardExistingInput): Promise<OnboardExistingResult> {
+  // 1. Find user by onboarding_token
+  const [existingUser] = await db.select().from(users)
+    .where(eq(users.onboarding_token, input.token))
+    .limit(1);
+
+  // 2. Token not found - 404
+  if (!existingUser) {
+    const error: ProblemDetails = {
+      type: 'https://urc-falke.app/errors/token-not-found',
+      title: 'Token nicht gefunden',
+      status: 404,
+      detail: 'Der Aktivierungscode wurde nicht gefunden. Bitte prüfe deinen QR-Code.'
+    };
+    throw error;
+  }
+
+  // 3. Token expired - 410 Gone
+  const now = new Date();
+  if (existingUser.onboarding_token_expires && existingUser.onboarding_token_expires < now) {
+    const error: ProblemDetails = {
+      type: 'https://urc-falke.app/errors/token-expired',
+      title: 'Token abgelaufen',
+      status: 410,
+      detail: 'Dein Aktivierungscode ist abgelaufen. Bitte kontaktiere uns unter info@urc-falke.at für einen neuen Code.'
+    };
+    throw error;
+  }
+
+  // 4. Token already used (status !== 'pre_seeded') - 409 Conflict
+  if (existingUser.onboarding_status !== 'pre_seeded') {
+    const error: ProblemDetails = {
+      type: 'https://urc-falke.app/errors/token-already-used',
+      title: 'Account bereits aktiviert',
+      status: 409,
+      detail: 'Du hast deinen Account bereits aktiviert. Bitte melde dich mit deinem Passwort an.'
+    };
+    throw error;
+  }
+
+  // 5. Token is valid - generate JWT and auto-login
+  const accessToken = await signAccessToken({
+    userId: existingUser.id,
+    role: (existingUser.role as 'member' | 'admin')
+  });
+
+  // 6. Return user object WITHOUT password_hash (SECURITY)
+  const { password_hash, ...userWithoutPassword } = existingUser;
+
+  return {
+    user: userWithoutPassword,
+    accessToken,
+    redirectTo: '/onboard-existing/set-password'
   };
 }

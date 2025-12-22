@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/user.routes.js';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.get('/health', (_req: Request, res: Response) => {
 
 // Routes
 app.use(authRoutes);
+app.use(userRoutes);
 // app.use('/api/v1/events', eventRoutes); // Added in later stories
 
 // Error handling middleware

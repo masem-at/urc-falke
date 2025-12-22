@@ -2,8 +2,8 @@ import { Router } from 'express';
 import { validate } from '../middleware/validate.middleware.js';
 import { authRateLimiter } from '../middleware/rate-limit.middleware.js';
 import { requireAuth } from '../middleware/auth.middleware.js';
-import { signupSchema, loginSchema } from '@urc-falke/shared';
-import { registerUser, loginUser, type ProblemDetails } from '../services/auth.service.js';
+import { signupSchema, loginSchema, onboardExistingSchema } from '@urc-falke/shared';
+import { registerUser, loginUser, onboardExistingUser, type ProblemDetails } from '../services/auth.service.js';
 import type { Request, Response, NextFunction } from 'express';
 
 // ============================================================================
@@ -11,10 +11,11 @@ import type { Request, Response, NextFunction } from 'express';
 // ============================================================================
 //
 // ENDPOINTS:
-// - POST /api/v1/auth/register - Register new user (Track B)
-// - POST /api/v1/auth/login    - Login existing user (Track A + B)
-// - POST /api/v1/auth/logout   - Logout user (clears cookie)
-// - GET  /api/v1/auth/me       - Get current authenticated user
+// - POST /api/v1/auth/register         - Register new user (Track B)
+// - POST /api/v1/auth/login            - Login existing user (Track A + B)
+// - POST /api/v1/auth/logout           - Logout user (clears cookie)
+// - GET  /api/v1/auth/me               - Get current authenticated user
+// - POST /api/v1/auth/onboard-existing - Token-based auto-login (Track A)
 //
 // SECURITY:
 // - Rate limiting: 10 requests/minute per IP
@@ -201,6 +202,67 @@ router.get(
   (req: Request, res: Response): void => {
     // requireAuth already attached user info to req.user
     res.status(200).json(req.user);
+  }
+);
+
+/**
+ * POST /api/v1/auth/onboard-existing
+ *
+ * Onboard an existing member using their QR code token (Track A)
+ *
+ * Request Body:
+ *   - token: string (onboarding token from QR code)
+ *
+ * Success Response (200 OK):
+ *   {
+ *     "user": { ... },
+ *     "redirectTo": "/onboard-existing/set-password"
+ *   }
+ *   + JWT cookie set in response headers
+ *
+ * CRITICAL: After successful onboard, user MUST be redirected to
+ * /onboard-existing/set-password to complete onboarding
+ *
+ * Error Responses:
+ *   - 400: Validation error (token missing)
+ *   - 404: Token not found
+ *   - 409: Token already used (account already activated)
+ *   - 410: Token expired
+ *   - 429: Rate limit exceeded
+ *   - 500: Internal server error
+ */
+router.post(
+  '/api/v1/auth/onboard-existing',
+  authRateLimiter, // Apply rate limiting FIRST
+  validate(onboardExistingSchema), // Then validate request body
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { user, accessToken, redirectTo } = await onboardExistingUser(req.body);
+
+      // Set JWT in HttpOnly cookie (SECURITY: NOT in localStorage)
+      res.cookie('accessToken', accessToken, {
+        httpOnly: true, // Prevents JavaScript access (XSS protection)
+        secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+        sameSite: 'lax', // CSRF protection
+        maxAge: 15 * 60 * 1000 // 15 minutes (matches JWT expiry)
+      });
+
+      // Return user and redirect path
+      res.status(200).json({
+        user,
+        redirectTo
+      });
+    } catch (error) {
+      // Handle ProblemDetails errors from service
+      if (error && typeof error === 'object' && 'status' in error) {
+        const problemDetails = error as ProblemDetails;
+        res.status(problemDetails.status).json(problemDetails);
+        return;
+      }
+
+      // Unexpected error - pass to error middleware
+      next(error);
+    }
   }
 );
 
