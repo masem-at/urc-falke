@@ -1,0 +1,5 @@
+email,first_name,last_name,usv_number
+mario@test.com,Mario,Test-Admin,USV111111
+gerhard@test.com,Gerhard,Test-User,USV222222
+lisa@test.com,Lisa,Test-Member,
+invalid-email,Hans,Invalid,USV345678

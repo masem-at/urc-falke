@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
-import * as schema from '@urc-falke/shared/db';
+import * as schema from '../../../../packages/shared/src/db/index.js';
 
 // NeonDB connection (HTTP driver for Serverless)
 const sql = neon(process.env.DATABASE_URL!);
