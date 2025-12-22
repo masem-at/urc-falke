@@ -52,7 +52,7 @@ integration-test-2@test.com,Test,User2,USV222222`;
     await writeFile(TEST_CSV_PATH, csvContent, 'utf-8');
 
     // Run the seed script
-    const { stdout, stderr } = await execAsync(
+    const { stdout, stderr: _stderr } = await execAsync(
       `tsx src/scripts/seed-members.ts --csv ${TEST_CSV_PATH} --output ${TEST_OUTPUT_PATH}`
     );
 

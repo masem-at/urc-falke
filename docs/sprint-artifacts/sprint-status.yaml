@@ -38,9 +38,9 @@ story_location: C:\Users\mario\Sources\dev\urc-falke\docs\sprint-artifacts
 development_status:
   epic-1: in-progress
   1-0-pre-seed-existing-urc-falke-members-admin-tool: done
-  1-1-monorepo-foundation-and-basic-user-schema: ready-for-dev
-  1-2-user-registration-with-email-and-password: ready-for-dev
-  1-3-user-login-and-session-management: backlog
+  1-1-monorepo-foundation-and-basic-user-schema: review
+  1-2-user-registration-with-email-and-password: in-progress
+  1-3-user-login-and-session-management: review
   1-4a-qr-code-onboarding-for-existing-members-token-based-auto-login: backlog
   1-4b-qr-code-onboarding-for-new-members-registration: backlog
   1-5-usv-mitgliedsnummer-verification: backlog

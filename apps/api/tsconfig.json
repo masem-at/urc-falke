@@ -9,7 +9,10 @@
     "rootDir": "./src",
     "types": ["node"],
     "paths": {
-      "@urc-falke/shared": ["../../packages/shared/src/index.ts"]
+      "@urc-falke/shared": ["../../packages/shared/src/index.ts"],
+      "@urc-falke/shared/db": ["../../packages/shared/src/db/index.ts"],
+      "@urc-falke/shared/types": ["../../packages/shared/src/types/index.ts"],
+      "@urc-falke/shared/schemas": ["../../packages/shared/src/schemas/auth.schema.ts"]
     }
   },
   "include": ["src/**/*"],
