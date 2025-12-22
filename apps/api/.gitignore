@@ -1,0 +1,5 @@
+.vercel
+
+# Test data and generated outputs
+data/
+*.csv

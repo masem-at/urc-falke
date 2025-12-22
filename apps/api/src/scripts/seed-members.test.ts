@@ -188,6 +188,39 @@ describe('URL Generation', () => {
     expect(encoded).not.toContain('&');
     expect(encoded).not.toContain('=');
   });
+
+  it('should generate valid QR code URL format', () => {
+    const token = 'A7K9P2M4X8Q1W5Z3';
+    const onboardingLink = `https://urc-falke.app/onboard-existing?token=${token}`;
+    const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(onboardingLink)}`;
+
+    // Verify URL starts with correct API endpoint
+    expect(qrCodeURL).toMatch(/^https:\/\/api\.qrserver\.com\/v1\/create-qr-code\/\?data=/);
+
+    // Verify URL is properly formatted
+    try {
+      const url = new URL(qrCodeURL);
+      expect(url.protocol).toBe('https:');
+      expect(url.hostname).toBe('api.qrserver.com');
+      expect(url.searchParams.has('data')).toBe(true);
+    } catch (error) {
+      throw new Error('Generated QR code URL is not a valid URL');
+    }
+  });
+
+  it('should verify QR code URL contains encoded onboarding link', () => {
+    const token = 'TEST123TOKEN456';
+    const onboardingLink = `https://urc-falke.app/onboard-existing?token=${token}`;
+    const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(onboardingLink)}`;
+
+    // Extract data parameter from QR URL
+    const url = new URL(qrCodeURL);
+    const dataParam = url.searchParams.get('data');
+
+    // Verify data parameter decodes back to original onboarding link
+    expect(dataParam).toBe(onboardingLink);
+    expect(dataParam).toContain(token);
+  });
 });
 
 // ============================================================================
