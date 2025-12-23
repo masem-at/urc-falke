@@ -1,13 +1,13 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 // ============================================================================
 // PASSWORD HASHING UTILITY
 // ============================================================================
 //
-// SECURITY NOTE: Uses bcrypt with 12 rounds (learned from Story 1.0)
+// SECURITY NOTE: Uses bcryptjs (pure JS) with 12 rounds
+// - bcryptjs instead of bcrypt for Vercel/serverless compatibility
 // - 12 rounds is the project standard (NOT 10)
 // - Provides strong security while maintaining acceptable performance
-// - Each hash takes ~200ms on modern hardware
 //
 // ============================================================================
 
