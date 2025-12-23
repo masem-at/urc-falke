@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "turbo run build --filter=@urc-falke/web --filter=@urc-falke/api",
+  "buildCommand": "turbo run build --filter=@urc-falke/shared && turbo run build --filter=@urc-falke/web --filter=@urc-falke/api",
   "devCommand": "turbo run dev --filter=@urc-falke/web",
   "installCommand": "pnpm install",
   "framework": null,
