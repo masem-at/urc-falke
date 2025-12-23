@@ -11,7 +11,7 @@
 - **Authentication:** JWT (jose 6.1.3) + bcrypt 5.x
 - **PWA:** vite-plugin-pwa 0.17+ (Workbox)
 
-## Project Structure
+## Project Structure 
 
 ```
 urc-falke/
