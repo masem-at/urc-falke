@@ -6,11 +6,6 @@
   "framework": null,
   "outputDirectory": "apps/web/dist",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD ./apps/web ./apps/api ./packages/shared ./packages/ui",
-  "functions": {
-    "api/*.js": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",
