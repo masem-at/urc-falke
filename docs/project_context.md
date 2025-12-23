@@ -1,7 +1,7 @@
 ---
 project_name: 'urc-falke'
 user_name: 'Mario'
-date: '2025-12-22'
+date: '2025-12-23'
 sections_completed: ['technology_stack', 'language_specific', 'framework_specific', 'naming_conventions', 'critical_rules']
 status: 'complete'
 ---
@@ -9,6 +9,47 @@ status: 'complete'
 # Project Context for AI Agents
 
 _This file contains critical rules and patterns that AI agents must follow when implementing code in this project. Focus on unobvious details that agents might otherwise miss._
+
+---
+
+## QUALITY FIRST MANDATE (2025-12-23)
+
+**Priority: CRITICAL - All agents MUST follow**
+
+This mandate was established after multiple production bugs were discovered that should have been caught by basic testing. Mario's time is precious - every bug found in production is a process failure.
+
+### Mandatory Quality Gates
+
+- **NO code merged without passing tests** - Every PR must have green CI
+- **NO API routes without integration tests** covering at least the happy path
+- **NO frontend pages without API contract verification** - test that frontend calls match API expectations
+- **Red-Green-Refactor is MANDATORY** - Write failing test first, then implementation
+- **Every bug found in production = process failure** - Document in retro and add test to prevent recurrence
+
+### Test Coverage Requirements
+
+| Layer | Minimum Coverage | Focus Areas |
+|-------|------------------|-------------|
+| API Routes | 100% happy path | Request validation, response format, auth checks |
+| Services | 80%+ | Business logic, edge cases, error handling |
+| Frontend Pages | Integration tests | Form submissions, API calls, redirects |
+| Shared Schemas | 100% | Zod validation, type exports |
+
+### Bugs Found Today (2025-12-23) - NEVER REPEAT
+
+1. **set-password page**: POST vs PUT method mismatch - would have been caught by integration test
+2. **set-password page**: `newPassword` vs `password` field name - would have been caught by contract test
+3. **onboard-existing page**: Page didn't exist - would have been caught by e2e test
+4. **complete-profile page**: Page didn't exist - would have been caught by e2e test
+
+### Quality Checklist Before Any PR
+
+- [ ] All new code has corresponding tests
+- [ ] All tests pass locally (`pnpm test`)
+- [ ] API routes have integration tests
+- [ ] Frontend forms test actual API calls (not mocked)
+- [ ] Error paths are tested, not just happy paths
+- [ ] German error messages are verified
 
 ---
 
@@ -693,6 +734,6 @@ formatter.format(new Date(createdAt)); // "22.12.2025, 11:00"
 
 ---
 
-**Last Updated:** 2025-12-22
-**Total Rules:** 100+ critical implementation patterns
+**Last Updated:** 2025-12-23
+**Total Rules:** 100+ critical implementation patterns (Quality First Mandate added)
 **Status:** Complete and optimized for LLM consumption
