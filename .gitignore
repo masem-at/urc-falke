@@ -48,3 +48,6 @@ coverage/
 .cache/
 
 .vercel
+*-output.csv
+Mitgliederliste*.csv
+Mitgliederliste*.ods
