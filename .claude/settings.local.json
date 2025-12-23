@@ -68,7 +68,17 @@
       "Bash(xargs -I {} sh -c 'echo \"\"export const dynamic = ''''force-dynamic''''\"\" | cat - {} > {}.tmp && mv {}.tmp {}')",
       "Bash(for file in register/page.tsx dashboard/page.tsx)",
       "Bash(do sed -i \"1s/^export const dynamic = ''force-dynamic''\\\\n/''use client''\\\\n\\\\nexport const dynamic = ''force-dynamic''\\\\n/\" \"$file\")",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(npm run dev:*)",
+      "Bash(for:*)",
+      "Bash(do netstat -ano)",
+      "Bash(xargs:*)",
+      "Bash(taskkill:*)",
+      "Bash(cd:*)",
+      "Bash(pnpm seed:members:dev:*)",
+      "WebFetch(domain:urc-falke.vercel.app)",
+      "WebFetch(domain:urc-falke-i5catd1rm-masemit-projects.vercel.app)",
+      "WebFetch(domain:urc-falke-masemit-projects.vercel.app)"
     ]
   }
 }
