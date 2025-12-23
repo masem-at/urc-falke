@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'URC Falke - Mitgliederverwaltung',
   description: 'Progressive Web App für die Mitgliederverwaltung des URC Falke',

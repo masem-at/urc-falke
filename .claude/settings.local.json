@@ -62,7 +62,13 @@
       "WebFetch(domain:vercel.com)",
       "Bash(vercel project:*)",
       "Bash(npx tsc:*)",
-      "WebFetch(domain:urc-falke-8wmjut4v8-masemit-projects.vercel.app)"
+      "WebFetch(domain:urc-falke-8wmjut4v8-masemit-projects.vercel.app)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(xargs -I {} sh -c 'echo \"\"export const dynamic = ''''force-dynamic''''\"\" | cat - {} > {}.tmp && mv {}.tmp {}')",
+      "Bash(for file in register/page.tsx dashboard/page.tsx)",
+      "Bash(do sed -i \"1s/^export const dynamic = ''force-dynamic''\\\\n/''use client''\\\\n\\\\nexport const dynamic = ''force-dynamic''\\\\n/\" \"$file\")",
+      "Bash(done)"
     ]
   }
 }
