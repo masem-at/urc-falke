@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "turbo run build --filter=@urc-falke/api",
+  "installCommand": "pnpm install",
+  "framework": null,
+  "outputDirectory": "apps/api/dist",
+  "functions": {
+    "apps/api/dist/**/*.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}
