@@ -5,6 +5,7 @@ import { cookies } from 'next/headers'
 import { verifyAccessToken } from '@/lib/jwt'
 import { verifyUSVNumber } from '@/lib/services/usv-verification.service'
 import { usvVerifySchema } from '@/lib/shared'
+import { checkRateLimit, getClientIp, USV_VERIFY_RATE_LIMIT } from '@/lib/rate-limit'
 import type { ZodError } from 'zod'
 
 /**
@@ -13,6 +14,7 @@ import type { ZodError } from 'zod'
  * Verify USV (Untersee Volleyball) membership number
  *
  * Requires: Valid JWT in accessToken cookie
+ * Rate Limited: 5 requests per minute per IP (AC1)
  *
  * Request Body:
  *   - usvNumber: string (USV membership number)
@@ -26,9 +28,33 @@ import type { ZodError } from 'zod'
  * Error Responses:
  *   - 400: Validation error (invalid USV number format)
  *   - 401: Not authenticated
+ *   - 429: Too many requests (rate limit exceeded)
  *   - 500: Internal server error (USV API unavailable)
  */
 export async function POST(request: NextRequest) {
+  // Rate limiting: 5 requests per minute per IP (AC1)
+  const clientIp = getClientIp(request.headers)
+  const rateLimitResult = checkRateLimit(`usv-verify:${clientIp}`, USV_VERIFY_RATE_LIMIT)
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      {
+        type: 'https://urc-falke.app/errors/rate-limit-exceeded',
+        title: 'Zu viele Anfragen',
+        status: 429,
+        detail: 'Zu viele Anfragen. Bitte versuche es in einer Minute erneut.',
+        retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000),
+      },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)),
+          'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+        },
+      }
+    )
+  }
+
   try {
     // Check authentication
     const cookieStore = await cookies()
