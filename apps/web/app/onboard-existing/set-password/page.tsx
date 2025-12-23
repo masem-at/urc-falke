@@ -30,11 +30,11 @@ export default function SetPasswordPage() {
 
     try {
       const response = await fetch('/api/v1/users/me/set-password', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ newPassword: password }),
+        body: JSON.stringify({ password }),
       })
 
       const data = await response.json()
@@ -45,8 +45,8 @@ export default function SetPasswordPage() {
         return
       }
 
-      // Redirect to dashboard after successful password change
-      router.push('/dashboard')
+      // Redirect to next onboarding step (or dashboard if complete)
+      router.push(data.redirectTo || '/dashboard')
     } catch (err) {
       setError('Ein Fehler ist aufgetreten')
       setLoading(false)
@@ -72,6 +72,16 @@ export default function SetPasswordPage() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Hidden username field for accessibility - password managers need this */}
+            <input
+              type="text"
+              name="username"
+              autoComplete="username"
+              className="sr-only"
+              tabIndex={-1}
+              aria-hidden="true"
+            />
+
             {error && (
               <div className="rounded-md bg-red-50 p-4">
                 <p className="text-sm text-red-800">{error}</p>
