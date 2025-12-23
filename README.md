@@ -9,7 +9,7 @@
 - **State Management:** TanStack Query 5.90.12 + Zustand 5.0.9
 - **Routing:** TanStack Router v1.x
 - **Authentication:** JWT (jose 6.1.3) + bcrypt 5.x
-- **PWA:** vite-plugin-pwa 0.17+ (Workbox)
+- **PWA:** vite-plugin-pwa 0.17+ (Workbox) 
 
 ## Project Structure 
 
