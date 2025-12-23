@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc && pnpm db:push",
+    "build": "cd ../../packages/shared && pnpm build && cd ../../apps/api && tsc && pnpm db:push",
     "build:no-migrate": "tsc",
     "start": "node dist/server.js",
     "db:generate": "drizzle-kit generate",
