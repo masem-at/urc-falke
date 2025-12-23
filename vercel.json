@@ -1,17 +1,16 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "turbo run build --filter=@urc-falke/web",
+  "buildCommand": "turbo run build --filter=@urc-falke/web --filter=@urc-falke/api",
   "devCommand": "turbo run dev --filter=@urc-falke/web",
   "installCommand": "pnpm install",
   "framework": null,
   "outputDirectory": "apps/web/dist",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./apps/web ./packages/shared ./packages/ui",
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "https://urc-falke-api.vercel.app/api/:path*"
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./apps/web ./apps/api ./packages/shared ./packages/ui",
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs20.x"
     }
-  ],
+  },
   "headers": [
     {
       "source": "/(.*)",
