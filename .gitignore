@@ -51,3 +51,6 @@ coverage/
 *-output.csv
 Mitgliederliste*.csv
 Mitgliederliste*.ods
+# Local environment
+.env.local
+*.local

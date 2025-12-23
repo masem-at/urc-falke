@@ -47,7 +47,10 @@
       "Bash(pnpm dev:*)",
       "Bash(vercel ls:*)",
       "Bash(vercel --prod:*)",
-      "Bash(vercel inspect:*)"
+      "Bash(vercel inspect:*)",
+      "Bash(find:*)",
+      "Bash(DATABASE_URL=\"postgresql://placeholder\" pnpm build:*)",
+      "Bash(echo:*)"
     ]
   }
 }

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm turbo build --filter=@urc-falke/api",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/apps/api/dist/app.js"
+    }
+  ]
+}
