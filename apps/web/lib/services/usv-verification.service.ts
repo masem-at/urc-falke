@@ -1,5 +1,5 @@
 import { db } from '../db/connection';
-import { users } from '@urc-falke/shared/db';
+import { users } from '@/lib/shared/db';
 import { eq } from 'drizzle-orm';
 
 export interface USVVerificationResult {

@@ -1,8 +1,8 @@
 import { db } from '../db/connection';
-import { users, type User } from '@urc-falke/shared/db';
+import { users, type User } from '@/lib/shared/db';
 import { hashPassword, verifyPassword } from '../password';
 import { signAccessToken } from '../jwt';
-import type { SignupInput, LoginInput, OnboardExistingInput } from '@urc-falke/shared';
+import type { SignupInput, LoginInput, OnboardExistingInput } from '@/lib/shared';
 import { eq } from 'drizzle-orm';
 
 // ============================================================================

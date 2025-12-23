@@ -1,7 +1,9 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { onboardExistingUser } from '@/lib/services/auth.service'
-import { onboardExistingSchema } from '@urc-falke/shared'
+import { onboardExistingSchema } from '@/lib/shared'
 import type { ZodError } from 'zod'
 
 /**

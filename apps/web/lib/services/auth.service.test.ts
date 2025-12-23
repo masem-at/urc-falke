@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { registerUser, loginUser, onboardExistingUser } from './auth.service';
-import type { SignupInput, LoginInput, OnboardExistingInput } from '@urc-falke/shared';
-import * as passwordModule from '../lib/password';
-import * as jwtModule from '../lib/jwt';
+import type { SignupInput, LoginInput, OnboardExistingInput } from '@/lib/shared';
+import * as passwordModule from '../password';
+import * as jwtModule from '../jwt';
 import * as dbModule from '../db/connection';
-import { users as _users } from '@urc-falke/shared/db';
+import { users as _users } from '@/lib/shared/db';
 
 // ============================================================================
 // REGISTRATION SERVICE TESTS

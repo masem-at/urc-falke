@@ -1,8 +1,10 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { verifyAccessToken } from '@/lib/jwt'
 import { completeProfile } from '@/lib/services/user.service'
-import { completeProfileSchema } from '@urc-falke/shared'
+import { completeProfileSchema } from '@/lib/shared'
 import type { ZodError } from 'zod'
 
 /**

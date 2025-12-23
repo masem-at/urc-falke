@@ -1,7 +1,7 @@
 import { db } from '../db/connection';
-import { users, type User } from '@urc-falke/shared/db';
+import { users, type User } from '@/lib/shared/db';
 import { hashPassword } from '../password';
-import type { SetPasswordInput, CompleteProfileInput } from '@urc-falke/shared';
+import type { SetPasswordInput, CompleteProfileInput } from '@/lib/shared';
 import { eq } from 'drizzle-orm';
 
 // ============================================================================

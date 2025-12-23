@@ -51,7 +51,18 @@
       "Bash(find:*)",
       "Bash(DATABASE_URL=\"postgresql://placeholder\" pnpm build:*)",
       "Bash(echo:*)",
-      "Bash(pnpm remove:*)"
+      "Bash(pnpm remove:*)",
+      "Bash(xargs sed:*)",
+      "Bash(DATABASE_URL='postgresql://user:pass@placeholder.neon.tech/db' pnpm build:*)",
+      "Bash(pnpm approve-builds:*)",
+      "Bash(pnpm rebuild:*)",
+      "Bash(npm install:*)",
+      "Bash(DATABASE_URL='postgresql://user:pass@placeholder.neon.tech/db' npm run build:*)",
+      "Bash(npm run build:*)",
+      "WebFetch(domain:vercel.com)",
+      "Bash(vercel project:*)",
+      "Bash(npx tsc:*)",
+      "WebFetch(domain:urc-falke-8wmjut4v8-masemit-projects.vercel.app)"
     ]
   }
 }

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { setPassword, completeProfile } from './user.service';
-import type { SetPasswordInput, CompleteProfileInput } from '@urc-falke/shared';
-import * as passwordModule from '../lib/password';
+import type { SetPasswordInput, CompleteProfileInput } from '@/lib/shared';
+import * as passwordModule from '../password';
 import * as dbModule from '../db/connection';
 
 // ============================================================================

@@ -1,8 +1,10 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { verifyAccessToken } from '@/lib/jwt'
 import { db } from '@/lib/db/connection'
-import { users } from '@urc-falke/shared/db'
+import { users } from '@/lib/shared/db'
 import { eq } from 'drizzle-orm'
 
 /**

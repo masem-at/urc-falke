@@ -17,10 +17,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@urc-falke/shared": ["../../packages/shared/dist/index"],
-      "@urc-falke/shared/*": ["../../packages/shared/dist/*"],
-      "@urc-falke/ui": ["../../packages/ui/src/index.ts"]
+      "@/*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx", "src"],

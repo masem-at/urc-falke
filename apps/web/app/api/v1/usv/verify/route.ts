@@ -1,8 +1,10 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { verifyAccessToken } from '@/lib/jwt'
 import { verifyUSVNumber } from '@/lib/services/usv-verification.service'
-import { usvVerifySchema } from '@urc-falke/shared'
+import { usvVerifySchema } from '@/lib/shared'
 import type { ZodError } from 'zod'
 
 /**
