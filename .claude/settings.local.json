@@ -43,7 +43,11 @@
       "Skill(bmad:bmm:workflows:code-review)",
       "Bash(bash:*)",
       "Bash(ls:*)",
-      "Skill(bmad:bmm:workflows:create-story)"
+      "Skill(bmad:bmm:workflows:create-story)",
+      "Bash(pnpm dev:*)",
+      "Bash(vercel ls:*)",
+      "Bash(vercel --prod:*)",
+      "Bash(vercel inspect:*)"
     ]
   }
 }
