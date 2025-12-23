@@ -296,7 +296,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       // Get authenticated user ID from JWT
-      if (!req.user?.id) {
+      if (!req.user?.userId) {
         res.status(401).json({
           type: 'https://urc-falke.app/errors/unauthorized',
           title: 'Nicht autorisiert',
@@ -308,7 +308,7 @@ router.post(
       }
 
       // Verify USV number and update database
-      const result = await verifyUSVNumber(req.body.usvNumber, req.user.id);
+      const result = await verifyUSVNumber(req.body.usvNumber, req.user.userId);
 
       res.status(200).json(result);
     } catch (error) {

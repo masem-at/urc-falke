@@ -1,8 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { verifyUSVNumber, type USVVerificationResult } from './usv-verification.service';
-import { db } from '../db/connection';
-import { users } from '@urc-falke/shared/db';
-import { eq } from 'drizzle-orm';
+import { verifyUSVNumber } from './usv-verification.service';
 
 // Mock global fetch
 global.fetch = vi.fn();
@@ -90,7 +87,7 @@ describe('USV Verification Service', () => {
       const mockUSVNumber = 'USV123456';
       let receivedSignal: AbortSignal | undefined;
 
-      (global.fetch as any).mockImplementation((url: string, options: any) => {
+      (global.fetch as any).mockImplementation((_url: string, options: any) => {
         receivedSignal = options.signal;
         return Promise.resolve({
           ok: true,
