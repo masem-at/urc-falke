@@ -53,7 +53,6 @@ export function SetPasswordForm({ onSuccess }: SetPasswordFormProps) {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
-    setValidationErrors(validatePassword(newPassword));
     setError(null);
   };
 
@@ -64,7 +63,7 @@ export function SetPasswordForm({ onSuccess }: SetPasswordFormProps) {
     // Check password requirements
     const errors = validatePassword(password);
     if (errors.length > 0) {
-      setValidationErrors(errors);
+      setError('Bitte erfülle alle Passwort-Anforderungen.');
       return;
     }
 
