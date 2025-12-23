@@ -78,7 +78,9 @@
       "Bash(pnpm seed:members:dev:*)",
       "WebFetch(domain:urc-falke.vercel.app)",
       "WebFetch(domain:urc-falke-i5catd1rm-masemit-projects.vercel.app)",
-      "WebFetch(domain:urc-falke-masemit-projects.vercel.app)"
+      "WebFetch(domain:urc-falke-masemit-projects.vercel.app)",
+      "WebFetch(domain:urc-falke-ogmhcdkkb-masemit-projects.vercel.app)",
+      "WebFetch(domain:urc-falke-bwuzf6w6x-masemit-projects.vercel.app)"
     ]
   }
 }
