@@ -11,6 +11,7 @@ export const users = pgTable('users', {
   // Profile Fields
   first_name: text('first_name'),
   last_name: text('last_name'),
+  nickname: text('nickname'), // Spitzname (displayed as "Nickname (FirstName LastName)")
   profile_image_url: text('profile_image_url'),
 
   // USV Membership Fields

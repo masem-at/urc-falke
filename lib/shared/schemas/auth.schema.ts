@@ -11,8 +11,9 @@ export const signupSchema = z.object({
     .regex(/[A-Z]/, 'Passwort muss mindestens einen Großbuchstaben enthalten')
     .regex(/[a-z]/, 'Passwort muss mindestens einen Kleinbuchstaben enthalten')
     .regex(/[0-9]/, 'Passwort muss mindestens eine Zahl enthalten'),
-  firstName: z.string().min(2, 'Vorname muss mindestens 2 Zeichen lang sein'),
-  lastName: z.string().min(2, 'Nachname muss mindestens 2 Zeichen lang sein'),
+  firstName: z.string().min(2, 'Vorname muss mindestens 2 Zeichen lang sein').optional(),
+  lastName: z.string().min(2, 'Nachname muss mindestens 2 Zeichen lang sein').optional(),
+  nickname: z.string().max(50, 'Spitzname zu lang (max. 50 Zeichen)').optional(),
   usvNumber: z.string().optional()
 });
 

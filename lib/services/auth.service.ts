@@ -48,7 +48,7 @@ export interface ProblemDetails {
 /**
  * Register a new user (Track B: New Members)
  *
- * @param input - Signup data (email, password, firstName, lastName, usvNumber)
+ * @param input - Signup data (email, password, firstName, lastName, nickname, usvNumber)
  * @returns Promise<RegistrationResult> - User object and JWT access token
  * @throws ProblemDetails if email already exists (409 Conflict)
  *
@@ -58,6 +58,7 @@ export interface ProblemDetails {
  *   password: 'SecurePass123',
  *   firstName: 'Max',
  *   lastName: 'Mustermann',
+ *   nickname: 'Maxi',
  *   usvNumber: 'USV123456'
  * });
  */
@@ -80,26 +81,35 @@ export async function registerUser(input: SignupInput): Promise<RegistrationResu
   // 2. Hash password with bcrypt (12 rounds - project standard)
   const passwordHash = await hashPassword(input.password);
 
-  // 3. Create user in database
+  // 3. Determine if user is a founding member (before launch date)
+  // Launch date: February 1st, 2025
+  const LAUNCH_DATE = new Date('2025-02-01T00:00:00Z');
+  const now = new Date();
+  const isFoundingMember = now < LAUNCH_DATE;
+
+  // 4. Create user in database
   // CRITICAL: Map camelCase input to snake_case database fields
   const [newUser] = await db.insert(users).values({
     email: input.email,
     password_hash: passwordHash,
-    first_name: input.firstName,
-    last_name: input.lastName,
+    first_name: input.firstName || null,
+    last_name: input.lastName || null,
+    nickname: input.nickname || null,
     usv_number: input.usvNumber || null,
+    is_usv_verified: input.usvNumber ? false : null, // false if USV number provided, null otherwise
     role: 'member',
     onboarding_status: 'completed', // Track B goes directly to completed
-    is_founding_member: false
+    is_founding_member: isFoundingMember,
+    lottery_registered: isFoundingMember // Same logic as founding member
   }).returning();
 
-  // 4. Generate JWT access token (15-minute expiry)
+  // 5. Generate JWT access token (15-minute expiry)
   const accessToken = await signAccessToken({
     userId: newUser.id,
     role: (newUser.role as 'member' | 'admin')
   });
 
-  // 5. Return user object WITHOUT password_hash (SECURITY)
+  // 6. Return user object WITHOUT password_hash (SECURITY)
   const { password_hash, ...userWithoutPassword } = newUser;
 
   return {
