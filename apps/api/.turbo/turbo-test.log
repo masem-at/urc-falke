@@ -1,0 +1,228 @@
+
+> @urc-falke/api@0.0.1 test C:\Users\mario\Sources\dev\urc-falke\apps\api
+> vitest "--run" "--reporter=verbose"
+
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mC:/Users/mario/Sources/dev/urc-falke/apps/api[39m
+
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22mvalid request body[2m > [22mshould call next() when validation passes
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22mvalid request body[2m > [22mshould not modify request body when validation passes
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22minvalid request body[2m > [22mshould return 400 with problem details when validation fails
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22minvalid request body[2m > [22mshould return validation errors for invalid email
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22minvalid request body[2m > [22mshould return validation errors for short password
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22minvalid request body[2m > [22mshould return multiple validation errors when multiple fields are invalid
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22minvalid request body[2m > [22mshould return German error messages
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22mmissing fields[2m > [22mshould return validation error when required field is missing
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22mmissing fields[2m > [22mshould return validation error when all fields are missing
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22mRFC 7807 compliance[2m > [22mshould return RFC 7807 compliant error response
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22mRFC 7807 compliance[2m > [22mshould include instance field with request URL
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22medge cases[2m > [22mshould handle null request body
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22medge cases[2m > [22mshould handle undefined request body
+ [32m✓[39m src/middleware/validate.middleware.test.ts[2m > [22mValidation Middleware[2m > [22medge cases[2m > [22mshould handle extra fields in request body (Zod default behavior)
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22msignAccessToken[2m > [22mshould sign a token for member role
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22msignAccessToken[2m > [22mshould sign a token for admin role
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22msignAccessToken[2m > [22mshould generate tokens with valid structure for the same payload
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22msignAccessToken[2m > [22mshould generate different tokens for different users
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22msignAccessToken[2m > [22mshould throw error if JWT_SECRET is not set
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mverifyAccessToken[2m > [22mshould verify a valid token
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mverifyAccessToken[2m > [22mshould verify admin role token
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mverifyAccessToken[2m > [22mshould reject token with invalid signature
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mverifyAccessToken[2m > [22mshould reject token signed with different secret
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mverifyAccessToken[2m > [22mshould reject malformed token
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mverifyAccessToken[2m > [22mshould reject empty token
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mverifyAccessToken[2m > [22mshould reject token without JWT_SECRET
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mverifyAccessToken[2m > [22mshould handle expired token gracefully
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mintegration: sign and verify workflow[2m > [22mshould complete full auth workflow
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mintegration: sign and verify workflow[2m > [22mshould handle admin user workflow
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mintegration: sign and verify workflow[2m > [22mshould maintain payload integrity through sign-verify cycle
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mtoken expiry (15 minutes)[2m > [22mshould have 15-minute expiry set in token
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mpayload structure validation[2m > [22mshould validate userId is a number
+ [32m✓[39m src/lib/jwt.test.ts[2m > [22mJWT Utility[2m > [22mpayload structure validation[2m > [22mshould validate role is member or admin
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mToken Generation[2m > [22mshould generate 16-character token
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mToken Generation[2m > [22mshould contain only A-Z and 0-9
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mToken Generation[2m > [22mshould generate unique tokens
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mToken Generation[2m > [22mshould generate different tokens each time
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mEmail Validation[2m > [22mshould accept valid emails
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mEmail Validation[2m > [22mshould reject invalid emails
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mEmail Validation[2m > [22mshould handle edge cases
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mPassword Generation[2m > [22mshould generate 16-character password
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mhashPassword[2m > [22mshould hash a password[33m 482[2mms[22m[39m
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mPassword Generation[2m > [22mshould hash password with bcrypt[33m 459[2mms[22m[39m
+ [31m×[39m src/db/connection.test.ts[2m > [22mDatabase Connection[2m > [22mshould connect to NeonDB successfully
+[31m   → Failed query: select "id", "email", "password_hash", "first_name", "last_name", "profile_image_url", "usv_number", "is_usv_verified", "role", "is_founding_member", "lottery_registered", "onboarding_token", "onboarding_token_expires", "onboarding_status", "must_change_password", "created_at", "updated_at" from "users" limit $1
+params: 1[39m
+ [31m×[39m src/db/connection.test.ts[2m > [22mDatabase Connection[2m > [22mshould have users table with correct schema
+[31m   → Failed query: select "id", "email", "onboarding_token", "is_founding_member" from "users" limit $1
+params: 1[39m
+ [31m×[39m src/scripts/seed-members.integration.test.ts[2m > [22mMember Pre-Seed Integration Tests[2m > [22mshould successfully pre-seed members from CSV to database
+[31m   → Failed query: delete from "users" where "users"."email" = $1
+params: integration-test-1@test.com[39m
+ [31m×[39m src/scripts/seed-members.integration.test.ts[2m > [22mMember Pre-Seed Integration Tests[2m > [22mshould handle duplicate emails correctly
+[31m   → Failed query: delete from "users" where "users"."email" = $1
+params: integration-test-1@test.com[39m
+ [31m×[39m src/scripts/seed-members.integration.test.ts[2m > [22mMember Pre-Seed Integration Tests[2m > [22mshould skip invalid emails and continue processing
+[31m   → Failed query: delete from "users" where "users"."email" = $1
+params: integration-test-1@test.com[39m
+ [31m×[39m src/scripts/seed-members.integration.test.ts[2m > [22mMember Pre-Seed Integration Tests[2m > [22mshould generate unique tokens for each member
+[31m   → Failed query: delete from "users" where "users"."email" = $1
+params: integration-test-1@test.com[39m
+ [31m×[39m src/scripts/seed-members.integration.test.ts[2m > [22mMember Pre-Seed Integration Tests[2m > [22mshould handle missing required fields
+[31m   → Failed query: delete from "users" where "users"."email" = $1
+params: integration-test-1@test.com[39m
+ [32m✓[39m src/middleware/auth.middleware.test.ts[2m > [22mAuth Middleware[2m > [22mrequireAuth[2m > [22mshould pass with valid token and must_change_password: false
+ [32m✓[39m src/middleware/auth.middleware.test.ts[2m > [22mAuth Middleware[2m > [22mrequireAuth[2m > [22mshould return 401 when no token is present
+ [32m✓[39m src/middleware/auth.middleware.test.ts[2m > [22mAuth Middleware[2m > [22mrequireAuth[2m > [22mshould return 401 for invalid token
+ [32m✓[39m src/middleware/auth.middleware.test.ts[2m > [22mAuth Middleware[2m > [22mrequireAuth[2m > [22mshould return 401 for expired token
+ [32m✓[39m src/middleware/auth.middleware.test.ts[2m > [22mAuth Middleware[2m > [22mrequireAuth[2m > [22mshould attach user payload to request
+ [32m✓[39m src/middleware/auth.middleware.test.ts[2m > [22mAuth Middleware[2m > [22mrequireAuth[2m > [22mshould return 403 with redirectTo when must_change_password is true (Track A)
+ [32m✓[39m src/middleware/auth.middleware.test.ts[2m > [22mAuth Middleware[2m > [22mrequireAuth[2m > [22mshould return 401 for deleted user (user not found in DB)
+ [32m✓[39m src/middleware/auth.middleware.test.ts[2m > [22mAuth Middleware[2m > [22moptionalAuth[2m > [22mshould continue without error when no token is present
+ [32m✓[39m src/middleware/auth.middleware.test.ts[2m > [22mAuth Middleware[2m > [22moptionalAuth[2m > [22mshould attach user when valid token is present
+ [32m✓[39m src/middleware/auth.middleware.test.ts[2m > [22mAuth Middleware[2m > [22moptionalAuth[2m > [22mshould continue without error when token is invalid
+ [32m✓[39m src/middleware/auth.middleware.test.ts[2m > [22mAuth Middleware[2m > [22moptionalAuth[2m > [22mshould NOT block access for must_change_password users
+ [32m✓[39m src/services/user.service.test.ts[2m > [22mUser Service[2m > [22msetPassword[2m > [22mshould successfully set password for pre-seeded user
+ [32m✓[39m src/services/user.service.test.ts[2m > [22mUser Service[2m > [22msetPassword[2m > [22mshould throw 404 when user not found
+ [32m✓[39m src/services/user.service.test.ts[2m > [22mUser Service[2m > [22msetPassword[2m > [22mshould throw 409 when password already set (must_change_password=false)
+ [32m✓[39m src/services/user.service.test.ts[2m > [22mUser Service[2m > [22msetPassword[2m > [22mshould clear onboarding token after password set (single-use)
+ [32m✓[39m src/services/user.service.test.ts[2m > [22mUser Service[2m > [22msetPassword[2m > [22mshould never return password_hash in response
+ [32m✓[39m src/services/user.service.test.ts[2m > [22mUser Service[2m > [22mcompleteProfile[2m > [22mshould successfully complete profile with all fields
+ [32m✓[39m src/services/user.service.test.ts[2m > [22mUser Service[2m > [22mcompleteProfile[2m > [22mshould complete profile with empty input (no changes)
+ [32m✓[39m src/services/user.service.test.ts[2m > [22mUser Service[2m > [22mcompleteProfile[2m > [22mshould throw 404 when user not found
+ [32m✓[39m src/services/user.service.test.ts[2m > [22mUser Service[2m > [22mcompleteProfile[2m > [22mshould always return showConfetti: true
+ [32m✓[39m src/services/user.service.test.ts[2m > [22mUser Service[2m > [22mcompleteProfile[2m > [22mshould never return password_hash in response
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mRegistration Service[2m > [22mregisterUser[2m > [22mshould successfully register a new user
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mRegistration Service[2m > [22mregisterUser[2m > [22mshould throw 409 error when email already exists
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mRegistration Service[2m > [22mregisterUser[2m > [22mshould handle optional usvNumber field
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mRegistration Service[2m > [22mregisterUser[2m > [22mshould set onboarding_status to completed for Track B users
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mRegistration Service[2m > [22mregisterUser[2m > [22mshould map camelCase input to snake_case database fields
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mRegistration Service[2m > [22mregisterUser[2m > [22mshould never return password_hash in response
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mLogin Service[2m > [22mloginUser[2m > [22mshould successfully login with valid credentials
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mLogin Service[2m > [22mloginUser[2m > [22mshould throw 401 for non-existent email
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mLogin Service[2m > [22mloginUser[2m > [22mshould throw 401 for incorrect password
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mLogin Service[2m > [22mloginUser[2m > [22mshould return same error for invalid email and password (security)
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mLogin Service[2m > [22mloginUser[2m > [22mshould generate JWT token on successful login
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mLogin Service[2m > [22mloginUser[2m > [22mshould never return password_hash in response
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mLogin Service[2m > [22mloginUser[2m > [22mshould return must_change_password flag
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mLogin Service[2m > [22mloginUser[2m > [22mshould return mustChangePassword: true for pre-seeded users (Track A)
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mLogin Service[2m > [22mloginUser[2m > [22mshould handle null must_change_password as false
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mOnboard Existing User Service[2m > [22monboardExistingUser[2m > [22mshould successfully auto-login with valid onboarding token
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mOnboard Existing User Service[2m > [22monboardExistingUser[2m > [22mshould throw 404 when token does not exist
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mOnboard Existing User Service[2m > [22monboardExistingUser[2m > [22mshould throw 410 when token is expired
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mOnboard Existing User Service[2m > [22monboardExistingUser[2m > [22mshould throw 409 when token is already used (onboarding_status !== pre_seeded)
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mOnboard Existing User Service[2m > [22monboardExistingUser[2m > [22mshould throw 409 when onboarding_status is completed
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mOnboard Existing User Service[2m > [22monboardExistingUser[2m > [22mshould never return password_hash in response
+ [32m✓[39m src/services/auth.service.test.ts[2m > [22mOnboard Existing User Service[2m > [22monboardExistingUser[2m > [22mshould generate JWT token with correct payload
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mhashPassword[2m > [22mshould generate different hashes for the same password[33m 857[2mms[22m[39m
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mPassword Generation[2m > [22mshould verify password against hash[33m 870[2mms[22m[39m
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mhashPassword[2m > [22mshould hash different passwords into different hashes[33m 654[2mms[22m[39m
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mPassword Generation[2m > [22mshould reject wrong password[33m 638[2mms[22m[39m
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mCSV Data Validation[2m > [22mshould validate required fields
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mCSV Data Validation[2m > [22mshould handle optional usv_number
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mURL Generation[2m > [22mshould generate correct onboarding link
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mURL Generation[2m > [22mshould generate correct QR code URL
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mURL Generation[2m > [22mshould properly encode special characters in QR URL
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mURL Generation[2m > [22mshould generate valid QR code URL format
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mURL Generation[2m > [22mshould verify QR code URL contains encoded onboarding link
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mToken Expiry[2m > [22mshould set expiry to 90 days from now
+ [32m✓[39m src/scripts/seed-members.test.ts[2m > [22mToken Expiry[2m > [22mshould handle month boundaries correctly
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mhashPassword[2m > [22mshould use 12 rounds (project standard)[33m 302[2mms[22m[39m
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mhashPassword[2m > [22mshould handle empty password
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mhashPassword[2m > [22mshould handle very long passwords
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mhashPassword[2m > [22mshould handle special characters in password[33m 389[2mms[22m[39m
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mverifyPassword[2m > [22mshould verify correct password[33m 603[2mms[22m[39m
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mverifyPassword[2m > [22mshould reject incorrect password[33m 617[2mms[22m[39m
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mverifyPassword[2m > [22mshould reject password with slight variation[33m 602[2mms[22m[39m
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mverifyPassword[2m > [22mshould reject password with different case[33m 517[2mms[22m[39m
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mverifyPassword[2m > [22mshould verify empty password if it was hashed[33m 545[2mms[22m[39m
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mverifyPassword[2m > [22mshould handle verification with special characters[33m 518[2mms[22m[39m
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mverifyPassword[2m > [22mshould work with hash from seed-members script[33m 545[2mms[22m[39m
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mintegration: hash and verify workflow[2m > [22mshould complete full workflow correctly[33m 788[2mms[22m[39m
+ [32m✓[39m src/lib/password.test.ts[2m > [22mPassword Hashing Utility[2m > [22mintegration: hash and verify workflow[2m > [22mshould handle multiple users with same password[33m 1240[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 7 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/db/connection.test.ts[2m > [22mDatabase Connection[2m > [22mshould connect to NeonDB successfully
+[31m[1mError[22m: Failed query: select "id", "email", "password_hash", "first_name", "last_name", "profile_image_url", "usv_number", "is_usv_verified", "role", "is_founding_member", "lottery_registered", "onboarding_token", "onboarding_token_expires", "onboarding_status", "must_change_password", "created_at", "updated_at" from "users" limit $1
+params: 1[39m
+[90m [2m❯[22m NeonHttpPreparedQuery.queryWithCache ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/pg-core/session.ts:[2m73:11[22m[39m
+[90m [2m❯[22m NeonHttpPreparedQuery.execute ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/neon-http/session.ts:[2m83:18[22m[39m
+[36m [2m❯[22m src/db/connection.test.ts:[2m7:20[22m[39m
+    [90m  5| [39m[34mdescribe[39m([32m'Database Connection'[39m[33m,[39m () [33m=>[39m {
+    [90m  6| [39m  it[33m.[39m[34mskipIf[39m([33m![39mprocess[33m.[39menv[33m.[39m[33mDATABASE_URL[39m)([32m'should connect to NeonDB succe[39m…
+    [90m  7| [39m    [35mconst[39m result [33m=[39m [35mawait[39m db[33m.[39m[34mselect[39m()[33m.[39m[35mfrom[39m(users)[33m.[39m[34mlimit[39m([34m1[39m)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m  8| [39m    [34mexpect[39m(result)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m  9| [39m    [34mexpect[39m([33mArray[39m[33m.[39m[34misArray[39m(result))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ query: 'select "id", "email", "password_hash", "first_name", "last_name", "profile_image_url", "usv_number", "is_usv_verified", "role", "is_founding_member", "lottery_registered", "onboarding_token", "onboarding_token_expires", "onboarding_status", "must_change_password", "created_at", "updated_at" from "users" limit $1', params: [ 1 ] }[39m
+[31m[1mCaused by: NeonDbError[22m: Error connecting to database: TypeError: fetch failed[39m
+[90m [2m❯[22m dr.execute ../../node_modules/.pnpm/@neondatabase+serverless@1.0.2/node_modules/@neondatabase/serverless/index.mjs:[2m1292:95[22m[39m
+[90m [2m❯[22m ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/neon-http/session.ts:[2m84:11[22m[39m
+[90m [2m❯[22m NeonHttpPreparedQuery.queryWithCache ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/pg-core/session.ts:[2m71:12[22m[39m
+[90m [2m❯[22m NeonHttpPreparedQuery.execute ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/neon-http/session.ts:[2m83:18[22m[39m
+[36m [2m❯[22m src/db/connection.test.ts:[2m7:20[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ severity: undefined, code: undefined, detail: undefined, hint: undefined, position: undefined, internalPosition: undefined, internalQuery: undefined, where: undefined, schema: undefined, table: undefined, column: undefined, dataType: undefined, constraint: undefined, file: undefined, line: undefined, routine: undefined, sourceError: { stack: 'TypeError: fetch failed\n    at node:internal/deps/undici/undici:13510:13\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at dr.execute (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@neondatabase+serverless@1.0.2/node_modules/@neondatabase/serverless/index.mjs:1292:4)\n    at file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/neon-http/session.ts:84:11\n    at NeonHttpPreparedQuery.queryWithCache (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/pg-core/session.ts:71:12)\n    at NeonHttpPreparedQuery.execute (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/neon-http/session.ts:83:18)\n    at C:\Users\mario\Sources\dev\urc-falke\apps\api\src\db\connection.test.ts:7:20\n    at file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5\n    at runTest (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)\n    at runSuite (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)', message: 'fetch failed', cause: { stack: 'AggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)', errors: [ { stack: 'Error: connect ECONNREFUSED ::1:443\n    at createConnectionError (node:net:1678:14)\n    at afterConnectMultiple (node:net:1708:16)', message: 'connect ECONNREFUSED ::1:443', errno: -4078, code: 'ECONNREFUSED', syscall: 'connect', address: '::1', port: 443, constructor: 'Function<Error>', name: 'Error', toString: 'Function<toString>' }, { stack: 'Error: connect ECONNREFUSED 127.0.0.1:443\n    at createConnectionError (node:net:1678:14)\n    at afterConnectMultiple (node:net:1708:16)', message: 'connect ECONNREFUSED 127.0.0.1:443', errno: -4078, code: 'ECONNREFUSED', syscall: 'connect', address: '127.0.0.1', port: 443, constructor: 'Function<Error>', name: 'Error', toString: 'Function<toString>' } ], code: 'ECONNREFUSED', constructor: 'Function<AggregateError>', name: 'AggregateError', message: '', toString: 'Function<toString>' }, constructor: 'Function<TypeError>', name: 'TypeError', toString: 'Function<toString>' } }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/db/connection.test.ts[2m > [22mDatabase Connection[2m > [22mshould have users table with correct schema
+[31m[1mError[22m: Failed query: select "id", "email", "onboarding_token", "is_founding_member" from "users" limit $1
+params: 1[39m
+[90m [2m❯[22m NeonHttpPreparedQuery.queryWithCache ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/pg-core/session.ts:[2m73:11[22m[39m
+[90m [2m❯[22m NeonHttpPreparedQuery.execute ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/neon-http/session.ts:[2m83:18[22m[39m
+[36m [2m❯[22m src/db/connection.test.ts:[2m13:20[22m[39m
+    [90m 11| [39m
+    [90m 12| [39m  it[33m.[39m[34mskipIf[39m([33m![39mprocess[33m.[39menv[33m.[39m[33mDATABASE_URL[39m)([32m'should have users table with c[39m…
+    [90m 13| [39m    [35mconst[39m result [33m=[39m [35mawait[39m db[33m.[39m[34mselect[39m({
+    [90m   | [39m                   [31m^[39m
+    [90m 14| [39m      id[33m:[39m users[33m.[39mid[33m,[39m
+    [90m 15| [39m      email[33m:[39m users[33m.[39memail[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ query: 'select "id", "email", "onboarding_token", "is_founding_member" from "users" limit $1', params: [ 1 ] }[39m
+[31m[1mCaused by: NeonDbError[22m: Error connecting to database: TypeError: fetch failed[39m
+[90m [2m❯[22m dr.execute ../../node_modules/.pnpm/@neondatabase+serverless@1.0.2/node_modules/@neondatabase/serverless/index.mjs:[2m1292:95[22m[39m
+[90m [2m❯[22m ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/neon-http/session.ts:[2m84:11[22m[39m
+[90m [2m❯[22m NeonHttpPreparedQuery.queryWithCache ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/pg-core/session.ts:[2m71:12[22m[39m
+[90m [2m❯[22m NeonHttpPreparedQuery.execute ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/neon-http/session.ts:[2m83:18[22m[39m
+[36m [2m❯[22m src/db/connection.test.ts:[2m13:20[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ severity: undefined, code: undefined, detail: undefined, hint: undefined, position: undefined, internalPosition: undefined, internalQuery: undefined, where: undefined, schema: undefined, table: undefined, column: undefined, dataType: undefined, constraint: undefined, file: undefined, line: undefined, routine: undefined, sourceError: { stack: 'TypeError: fetch failed\n    at node:internal/deps/undici/undici:13510:13\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at dr.execute (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@neondatabase+serverless@1.0.2/node_modules/@neondatabase/serverless/index.mjs:1292:4)\n    at file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/neon-http/session.ts:84:11\n    at NeonHttpPreparedQuery.queryWithCache (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/pg-core/session.ts:71:12)\n    at NeonHttpPreparedQuery.execute (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/neon-http/session.ts:83:18)\n    at C:\Users\mario\Sources\dev\urc-falke\apps\api\src\db\connection.test.ts:13:20\n    at file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5\n    at runTest (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)\n    at runSuite (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)', message: 'fetch failed', cause: { stack: 'AggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)', errors: [ { stack: 'Error: connect ECONNREFUSED ::1:443\n    at createConnectionError (node:net:1678:14)\n    at afterConnectMultiple (node:net:1708:16)', message: 'connect ECONNREFUSED ::1:443', errno: -4078, code: 'ECONNREFUSED', syscall: 'connect', address: '::1', port: 443, constructor: 'Function<Error>', name: 'Error', toString: 'Function<toString>' }, { stack: 'Error: connect ECONNREFUSED 127.0.0.1:443\n    at createConnectionError (node:net:1678:14)\n    at afterConnectMultiple (node:net:1708:16)', message: 'connect ECONNREFUSED 127.0.0.1:443', errno: -4078, code: 'ECONNREFUSED', syscall: 'connect', address: '127.0.0.1', port: 443, constructor: 'Function<Error>', name: 'Error', toString: 'Function<toString>' } ], code: 'ECONNREFUSED', constructor: 'Function<AggregateError>', name: 'AggregateError', message: '', toString: 'Function<toString>' }, constructor: 'Function<TypeError>', name: 'TypeError', toString: 'Function<toString>' } }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/scripts/seed-members.integration.test.ts[2m > [22mMember Pre-Seed Integration Tests[2m > [22mshould successfully pre-seed members from CSV to database
+[31m[1m[7m FAIL [27m[22m[39m src/scripts/seed-members.integration.test.ts[2m > [22mMember Pre-Seed Integration Tests[2m > [22mshould handle duplicate emails correctly
+[31m[1m[7m FAIL [27m[22m[39m src/scripts/seed-members.integration.test.ts[2m > [22mMember Pre-Seed Integration Tests[2m > [22mshould skip invalid emails and continue processing
+[31m[1m[7m FAIL [27m[22m[39m src/scripts/seed-members.integration.test.ts[2m > [22mMember Pre-Seed Integration Tests[2m > [22mshould generate unique tokens for each member
+[31m[1m[7m FAIL [27m[22m[39m src/scripts/seed-members.integration.test.ts[2m > [22mMember Pre-Seed Integration Tests[2m > [22mshould handle missing required fields
+[31m[1mError[22m: Failed query: delete from "users" where "users"."email" = $1
+params: integration-test-1@test.com[39m
+[90m [2m❯[22m NeonHttpPreparedQuery.queryWithCache ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/pg-core/session.ts:[2m73:11[22m[39m
+[36m [2m❯[22m src/scripts/seed-members.integration.test.ts:[2m36:3[22m[39m
+    [90m 34| [39m[34mbeforeEach[39m([35masync[39m () [33m=>[39m {
+    [90m 35| [39m  [90m// Clean up test users before each test[39m
+    [90m 36| [39m  [35mawait[39m db[33m.[39m[35mdelete[39m(users)[33m.[39m[34mwhere[39m([34meq[39m(users[33m.[39memail[33m,[39m [32m'integration-test-1@tes[39m…
+    [90m   | [39m  [31m^[39m
+    [90m 37| [39m  [35mawait[39m db[33m.[39m[35mdelete[39m(users)[33m.[39m[34mwhere[39m([34meq[39m(users[33m.[39memail[33m,[39m [32m'integration-test-2@tes[39m…
+    [90m 38| [39m  [35mawait[39m db[33m.[39m[35mdelete[39m(users)[33m.[39m[34mwhere[39m([34meq[39m(users[33m.[39memail[33m,[39m [32m'integration-test-3@tes[39m…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ query: 'delete from "users" where "users"."email" = $1', params: [ 'integration-test-1@test.com' ] }[39m
+[31m[1mCaused by: NeonDbError[22m: Error connecting to database: TypeError: fetch failed[39m
+[90m [2m❯[22m dr.execute ../../node_modules/.pnpm/@neondatabase+serverless@1.0.2/node_modules/@neondatabase/serverless/index.mjs:[2m1292:95[22m[39m
+[90m [2m❯[22m NeonHttpPreparedQuery.queryWithCache ../../node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/pg-core/session.ts:[2m71:12[22m[39m
+[36m [2m❯[22m src/scripts/seed-members.integration.test.ts:[2m36:3[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ severity: undefined, code: undefined, detail: undefined, hint: undefined, position: undefined, internalPosition: undefined, internalQuery: undefined, where: undefined, schema: undefined, table: undefined, column: undefined, dataType: undefined, constraint: undefined, file: undefined, line: undefined, routine: undefined, sourceError: { stack: 'TypeError: fetch failed\n    at node:internal/deps/undici/undici:13510:13\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at dr.execute (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@neondatabase+serverless@1.0.2/node_modules/@neondatabase/serverless/index.mjs:1292:4)\n    at NeonHttpPreparedQuery.queryWithCache (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/drizzle-orm@0.45.1_@neondatabase+serverless@1.0.2/node_modules/src/pg-core/session.ts:71:12)\n    at C:\Users\mario\Sources\dev\urc-falke\apps\api\src\scripts\seed-members.integration.test.ts:36:3\n    at callSuiteHook (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:964:22)\n    at callSuiteHook (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:953:10)\n    at runTest (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1040:30)\n    at runSuite (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runSuite (file:///C:/Users/mario/Sources/dev/urc-falke/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)', message: 'fetch failed', cause: { stack: 'AggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)', errors: [ { stack: 'Error: connect ECONNREFUSED ::1:443\n    at createConnectionError (node:net:1678:14)\n    at afterConnectMultiple (node:net:1708:16)', message: 'connect ECONNREFUSED ::1:443', errno: -4078, code: 'ECONNREFUSED', syscall: 'connect', address: '::1', port: 443, constructor: 'Function<Error>', name: 'Error', toString: 'Function<toString>' }, { stack: 'Error: connect ECONNREFUSED 127.0.0.1:443\n    at createConnectionError (node:net:1678:14)\n    at afterConnectMultiple (node:net:1708:16)', message: 'connect ECONNREFUSED 127.0.0.1:443', errno: -4078, code: 'ECONNREFUSED', syscall: 'connect', address: '127.0.0.1', port: 443, constructor: 'Function<Error>', name: 'Error', toString: 'Function<toString>' } ], code: 'ECONNREFUSED', constructor: 'Function<AggregateError>', name: 'AggregateError', message: '', toString: 'Function<toString>' }, constructor: 'Function<TypeError>', name: 'TypeError', toString: 'Function<toString>' } }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (9)[39m
+[2m      Tests [22m [1m[31m7 failed[39m[22m[2m | [22m[1m[32m112 passed[39m[22m[90m (119)[39m
+[2m   Start at [22m 16:06:49
+[2m   Duration [22m 11.02s[2m (transform 1.20s, setup 0ms, collect 9.87s, tests 11.81s, environment 6ms, prepare 4.70s)[22m
+
+ ELIFECYCLE  Test failed. See above for more details.

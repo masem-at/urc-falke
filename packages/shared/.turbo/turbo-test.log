@@ -1,0 +1,30 @@
+
+> @urc-falke/shared@0.0.1 test C:\Users\mario\Sources\dev\urc-falke\packages\shared
+> vitest "--run" "--reporter=verbose"
+
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mC:/Users/mario/Sources/dev/urc-falke/packages/shared[39m
+
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22memail validation[2m > [22mshould accept valid email addresses
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22memail validation[2m > [22mshould reject invalid email addresses
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22memail validation[2m > [22mshould show German error message for invalid email
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22mpassword validation[2m > [22mshould accept valid passwords
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22mpassword validation[2m > [22mshould reject passwords shorter than 8 characters
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22mpassword validation[2m > [22mshould reject passwords without uppercase letter
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22mpassword validation[2m > [22mshould reject passwords without lowercase letter
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22mpassword validation[2m > [22mshould reject passwords without number
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22mfirstName validation[2m > [22mshould accept valid first names
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22mfirstName validation[2m > [22mshould reject first names shorter than 2 characters
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22mlastName validation[2m > [22mshould accept valid last names
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22mlastName validation[2m > [22mshould reject last names shorter than 2 characters
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22musvNumber validation[2m > [22mshould accept valid USV numbers
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22musvNumber validation[2m > [22mshould accept missing USV number (optional)
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22musvNumber validation[2m > [22mshould accept undefined USV number
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22mcomplete schema validation[2m > [22mshould pass with all valid fields
+ [32m✓[39m src/schemas/auth.schema.test.ts[2m > [22msignupSchema[2m > [22mcomplete schema validation[2m > [22mshould fail with multiple invalid fields and return all errors
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m17 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 13:49:52
+[2m   Duration [22m 2.39s[2m (transform 472ms, setup 0ms, collect 597ms, tests 118ms, environment 1ms, prepare 907ms)[22m
+

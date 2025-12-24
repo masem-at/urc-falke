@@ -80,7 +80,15 @@
       "WebFetch(domain:urc-falke-i5catd1rm-masemit-projects.vercel.app)",
       "WebFetch(domain:urc-falke-masemit-projects.vercel.app)",
       "WebFetch(domain:urc-falke-ogmhcdkkb-masemit-projects.vercel.app)",
-      "WebFetch(domain:urc-falke-bwuzf6w6x-masemit-projects.vercel.app)"
+      "WebFetch(domain:urc-falke-bwuzf6w6x-masemit-projects.vercel.app)",
+      "Bash(git push:*)",
+      "Bash(timeout /t 5)",
+      "WebFetch(domain:vercel.mintlify-docs-rest-api-reference.com)",
+      "Bash(npx tsx:*)",
+      "Bash(timeout /t 1)",
+      "WebFetch(domain:urc-falke-68tocbldd-masemit-projects.vercel.app)",
+      "Bash(timeout /t 15)",
+      "Bash(timeout /t 2)"
     ]
   }
 }

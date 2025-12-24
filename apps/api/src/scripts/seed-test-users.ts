@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import crypto from 'crypto';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { db } from '../db/connection.js';
 import { users } from '../../../../packages/shared/src/db/schema/users.js';
 import { eq } from 'drizzle-orm';

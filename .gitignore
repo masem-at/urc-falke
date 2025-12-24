@@ -1,56 +1,17 @@
 # Dependencies
 node_modules/
-.pnp
-.pnp.js
 
-# Build outputs
-dist/
-build/
-.next/
-out/
+# Next.js
+/.next/
+/out/
+next-env.d.ts
 
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Vercel
+.vercel
 
-# Logs
-logs
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
+# Build
+dist
+*.local
 
 # Testing
-coverage/
-.nyc_output/
-
-# Turborepo
-.turbo/
-
-# Misc
-*.tsbuildinfo
-.cache/
-
-.vercel
-*-output.csv
-Mitgliederliste*.csv
-Mitgliederliste*.ods
-# Local environment
-.env.local
-*.local
+/coverage
