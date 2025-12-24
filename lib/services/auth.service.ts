@@ -70,7 +70,7 @@ export async function registerUser(input: SignupInput): Promise<RegistrationResu
 
   if (existingUser.length > 0) {
     const error: ProblemDetails = {
-      type: 'https://urc-falke.app/errors/email-already-exists',
+      type: 'https://urc-falke.app/errors/email-exists',
       title: 'Email bereits registriert',
       status: 409,
       detail: 'Ein Benutzer mit dieser Email existiert bereits.'
@@ -82,8 +82,7 @@ export async function registerUser(input: SignupInput): Promise<RegistrationResu
   const passwordHash = await hashPassword(input.password);
 
   // 3. Determine if user is a founding member (before launch date)
-  // Launch date: February 1st, 2025
-  const LAUNCH_DATE = new Date('2025-02-01T00:00:00Z');
+  const LAUNCH_DATE = new Date(process.env.LAUNCH_DATE || '2025-02-01T00:00:00Z');
   const now = new Date();
   const isFoundingMember = now < LAUNCH_DATE;
 

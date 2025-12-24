@@ -17,9 +17,10 @@ export default function RegisterPage() {
   const [nickname, setNickname] = useState('')
   const [hasUsvNumber, setHasUsvNumber] = useState(false)
   const [usvNumber, setUsvNumber] = useState('')
-  const [error, setError] = useState('')
+  const [error, setError] = useState<string | React.ReactNode>('')
   const [loading, setLoading] = useState(false)
   const [passwordMismatch, setPasswordMismatch] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,7 +37,14 @@ export default function RegisterPage() {
     setLoading(true)
 
     try {
-      const payload: any = {
+      const payload: {
+        email: string
+        password: string
+        firstName?: string
+        lastName?: string
+        nickname?: string
+        usvNumber?: string
+      } = {
         email,
         password,
       }
@@ -66,7 +74,7 @@ export default function RegisterPage() {
               <a href="/reset-password" className="underline font-semibold">
                 Passwort vergessen?
               </a>
-            </span> as any
+            </span>
           )
         } else {
           setError(data.detail || 'Registrierung fehlgeschlagen')
@@ -78,18 +86,17 @@ export default function RegisterPage() {
       // Success! Trigger konfetti animation
       triggerConfetti()
 
-      // Show USV verification message if USV number was provided
+      // Show success message
       if (hasUsvNumber && usvNumber) {
-        // Brief delay to show konfetti, then show message
-        setTimeout(() => {
-          alert('Geschafft! Du bist jetzt Mitglied.\n\nDeine USV-Mitgliedsnummer wird geprüft...')
-        }, 500)
+        setSuccessMessage('Geschafft! Du bist jetzt Mitglied.\n\nDeine USV-Mitgliedsnummer wird geprüft...')
+      } else {
+        setSuccessMessage('Geschafft! Du bist jetzt Mitglied.')
       }
 
       // Redirect to events page (not dashboard!)
       setTimeout(() => {
         router.push('/events')
-      }, 1000)
+      }, 2000)
     } catch (err) {
       setError('Ein Fehler ist aufgetreten')
       setLoading(false)
@@ -118,6 +125,12 @@ export default function RegisterPage() {
             {error && (
               <div className="rounded-md bg-red-50 p-4">
                 <p className="text-sm text-red-800">{error}</p>
+              </div>
+            )}
+
+            {successMessage && (
+              <div className="rounded-md bg-green-50 p-4">
+                <p className="text-sm text-green-800 whitespace-pre-line">{successMessage}</p>
               </div>
             )}
 
