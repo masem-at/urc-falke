@@ -76,3 +76,54 @@ export const usvVerifySchema = z.object({
 });
 
 export type USVVerifyInput = z.infer<typeof usvVerifySchema>;
+
+// ============================================================================
+// UPDATE PROFILE SCHEMA (Story 1.6: Profile Management)
+// ============================================================================
+
+export const updateProfileSchema = z.object({
+  firstName: z.string().min(2, 'Vorname muss mindestens 2 Zeichen lang sein').max(50).optional(),
+  lastName: z.string().min(2, 'Nachname muss mindestens 2 Zeichen lang sein').max(50).optional(),
+  nickname: z.string().max(50, 'Spitzname zu lang (max. 50 Zeichen)').optional()
+});
+
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+
+// ============================================================================
+// FORGOT PASSWORD SCHEMA (Story 1.7: Password Reset Request)
+// ============================================================================
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email('Ungültige Email-Adresse')
+});
+
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+
+// ============================================================================
+// RESET PASSWORD SCHEMA (Story 1.7: Set New Password)
+// ============================================================================
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1, 'Token wird benötigt'),
+  password: z.string()
+    .min(8, 'Passwort muss mindestens 8 Zeichen lang sein')
+    .regex(/[A-Z]/, 'Passwort muss mindestens einen Großbuchstaben enthalten')
+    .regex(/[a-z]/, 'Passwort muss mindestens einen Kleinbuchstaben enthalten')
+    .regex(/[0-9]/, 'Passwort muss mindestens eine Zahl enthalten'),
+  passwordConfirm: z.string()
+}).refine((data) => data.password === data.passwordConfirm, {
+  message: 'Passwörter stimmen nicht überein',
+  path: ['passwordConfirm']
+});
+
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+
+// ============================================================================
+// VALIDATE TOKEN SCHEMA (Story 1.7: Token Validation)
+// ============================================================================
+
+export const validateTokenSchema = z.object({
+  token: z.string().min(1, 'Token wird benötigt')
+});
+
+export type ValidateTokenInput = z.infer<typeof validateTokenSchema>;

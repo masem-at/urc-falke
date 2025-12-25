@@ -31,7 +31,14 @@ const nextConfig = {
 
   // Image optimization
   images: {
-    domains: [],
+    // Use remotePatterns for wildcard support (domains doesn't support wildcards)
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+        pathname: '/**',
+      },
+    ],
     formats: ['image/avif', 'image/webp'],
   },
 

@@ -31,6 +31,10 @@ export const users = pgTable('users', {
   onboarding_status: text('onboarding_status'), // 'pre_seeded' | 'password_changed' | 'completed'
   must_change_password: boolean('must_change_password').default(false),
 
+  // Password Reset Fields (Story 1.7)
+  password_reset_token: text('password_reset_token').unique(),
+  password_reset_token_expires: timestamp('password_reset_token_expires'),
+
   // Timestamps
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow()

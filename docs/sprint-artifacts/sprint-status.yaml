@@ -44,9 +44,9 @@ development_status:
   1-4a-qr-code-onboarding-for-existing-members-token-based-auto-login: done
   1-4b-qr-code-onboarding-for-new-members-registration: review
   1-5-usv-mitgliedsnummer-verification: done
-  1-6-user-profile-management: ready-for-dev
-  1-7-password-reset-flow: backlog
-  1-8-account-deletion-dsgvo: backlog
+  1-6-user-profile-management: review
+  1-7-password-reset-flow: done
+  1-8-account-deletion-dsgvo: done
   1-9-gruendungsmitglied-badge-and-lostopf: backlog
   epic-1-retrospective: optional
 

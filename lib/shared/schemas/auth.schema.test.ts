@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { signupSchema } from './auth.schema';
+import {
+  signupSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  validateTokenSchema
+} from './auth.schema';
 
 // ============================================================================
 // SIGNUP SCHEMA VALIDATION TESTS
@@ -293,5 +298,191 @@ describe('signupSchema', () => {
         expect(errorPaths).toContain('lastName');
       }
     });
+  });
+});
+
+// ============================================================================
+// FORGOT PASSWORD SCHEMA VALIDATION TESTS
+// ============================================================================
+
+describe('forgotPasswordSchema', () => {
+  it('should accept valid email', () => {
+    const result = forgotPasswordSchema.safeParse({
+      email: 'test@example.com'
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('should reject invalid email', () => {
+    const result = forgotPasswordSchema.safeParse({
+      email: 'invalid-email'
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].message).toBe('Ungültige Email-Adresse');
+    }
+  });
+
+  it('should reject empty email', () => {
+    const result = forgotPasswordSchema.safeParse({
+      email: ''
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('should reject missing email', () => {
+    const result = forgotPasswordSchema.safeParse({});
+    expect(result.success).toBe(false);
+  });
+});
+
+// ============================================================================
+// RESET PASSWORD SCHEMA VALIDATION TESTS
+// ============================================================================
+
+describe('resetPasswordSchema', () => {
+  describe('token validation', () => {
+    it('should accept valid token', () => {
+      const result = resetPasswordSchema.safeParse({
+        token: 'abc123def456',
+        password: 'NewPass123',
+        passwordConfirm: 'NewPass123'
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('should reject empty token', () => {
+      const result = resetPasswordSchema.safeParse({
+        token: '',
+        password: 'NewPass123',
+        passwordConfirm: 'NewPass123'
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const tokenError = result.error.issues.find(issue => issue.path.includes('token'));
+        expect(tokenError?.message).toBe('Token wird benötigt');
+      }
+    });
+  });
+
+  describe('password validation', () => {
+    it('should accept valid password meeting all requirements', () => {
+      const result = resetPasswordSchema.safeParse({
+        token: 'valid-token',
+        password: 'SecurePass1',
+        passwordConfirm: 'SecurePass1'
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('should reject password shorter than 8 characters', () => {
+      const result = resetPasswordSchema.safeParse({
+        token: 'valid-token',
+        password: 'Short1',
+        passwordConfirm: 'Short1'
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const passwordError = result.error.issues.find(issue => issue.path.includes('password'));
+        expect(passwordError?.message).toBe('Passwort muss mindestens 8 Zeichen lang sein');
+      }
+    });
+
+    it('should reject password without uppercase letter', () => {
+      const result = resetPasswordSchema.safeParse({
+        token: 'valid-token',
+        password: 'lowercase1',
+        passwordConfirm: 'lowercase1'
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const passwordError = result.error.issues.find(issue =>
+          issue.path.includes('password') && issue.message.includes('Großbuchstaben')
+        );
+        expect(passwordError).toBeDefined();
+      }
+    });
+
+    it('should reject password without lowercase letter', () => {
+      const result = resetPasswordSchema.safeParse({
+        token: 'valid-token',
+        password: 'UPPERCASE1',
+        passwordConfirm: 'UPPERCASE1'
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const passwordError = result.error.issues.find(issue =>
+          issue.path.includes('password') && issue.message.includes('Kleinbuchstaben')
+        );
+        expect(passwordError).toBeDefined();
+      }
+    });
+
+    it('should reject password without number', () => {
+      const result = resetPasswordSchema.safeParse({
+        token: 'valid-token',
+        password: 'NoNumberHere',
+        passwordConfirm: 'NoNumberHere'
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const passwordError = result.error.issues.find(issue =>
+          issue.path.includes('password') && issue.message.includes('Zahl')
+        );
+        expect(passwordError).toBeDefined();
+      }
+    });
+  });
+
+  describe('password confirmation validation', () => {
+    it('should accept matching passwords', () => {
+      const result = resetPasswordSchema.safeParse({
+        token: 'valid-token',
+        password: 'SecurePass1',
+        passwordConfirm: 'SecurePass1'
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('should reject non-matching passwords', () => {
+      const result = resetPasswordSchema.safeParse({
+        token: 'valid-token',
+        password: 'SecurePass1',
+        passwordConfirm: 'DifferentPass1'
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const confirmError = result.error.issues.find(issue => issue.path.includes('passwordConfirm'));
+        expect(confirmError?.message).toBe('Passwörter stimmen nicht überein');
+      }
+    });
+  });
+});
+
+// ============================================================================
+// VALIDATE TOKEN SCHEMA TESTS
+// ============================================================================
+
+describe('validateTokenSchema', () => {
+  it('should accept valid token', () => {
+    const result = validateTokenSchema.safeParse({
+      token: 'abc123def456ghi789'
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('should reject empty token', () => {
+    const result = validateTokenSchema.safeParse({
+      token: ''
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].message).toBe('Token wird benötigt');
+    }
+  });
+
+  it('should reject missing token', () => {
+    const result = validateTokenSchema.safeParse({});
+    expect(result.success).toBe(false);
   });
 });

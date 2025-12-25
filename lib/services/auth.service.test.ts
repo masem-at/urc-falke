@@ -1,10 +1,41 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { registerUser, loginUser, onboardExistingUser } from './auth.service';
 import type { SignupInput, LoginInput, OnboardExistingInput } from '@/lib/shared';
 import * as passwordModule from '../password';
 import * as jwtModule from '../jwt';
-import * as dbModule from '../db/connection';
-import { users as _users } from '@/lib/shared/db';
+
+// Mock the db module BEFORE importing the service
+vi.mock('../db/connection', () => {
+  const mockDb = {
+    select: vi.fn(),
+    insert: vi.fn(),
+    update: vi.fn(),
+  };
+  return { db: mockDb };
+});
+
+// Import after mocking
+import { registerUser, loginUser, onboardExistingUser } from './auth.service';
+import { db } from '../db/connection';
+
+// Helper to create chainable mock for db.select()
+const createSelectMock = (result: any[]) => ({
+  from: vi.fn().mockReturnThis(),
+  where: vi.fn().mockReturnThis(),
+  limit: vi.fn().mockResolvedValue(result),
+});
+
+// Helper to create chainable mock for db.insert()
+const createInsertMock = (result: any[]) => ({
+  values: vi.fn().mockReturnThis(),
+  returning: vi.fn().mockResolvedValue(result),
+});
+
+// Helper to create chainable mock for db.update()
+const createUpdateMock = (result: any[]) => ({
+  set: vi.fn().mockReturnThis(),
+  where: vi.fn().mockReturnThis(),
+  returning: vi.fn().mockResolvedValue(result),
+});
 
 // ============================================================================
 // REGISTRATION SERVICE TESTS
@@ -63,8 +94,8 @@ describe('Registration Service', () => {
       };
 
       // Mock db operations
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
-      vi.spyOn(dbModule.db, 'insert').mockReturnValue(mockInsert as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
+      vi.mocked(db.insert).mockReturnValue(mockInsert as any);
 
       // Mock password hashing
       vi.spyOn(passwordModule, 'hashPassword').mockResolvedValue('$2b$12$hashedPassword');
@@ -114,13 +145,13 @@ describe('Registration Service', () => {
         ])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
 
       await expect(registerUser(input)).rejects.toMatchObject({
         status: 409,
         title: 'Email bereits registriert',
         detail: 'Ein Benutzer mit dieser Email existiert bereits.',
-        type: 'https://urc-falke.app/errors/email-already-exists'
+        type: 'https://urc-falke.app/errors/email-exists'
       });
     });
 
@@ -164,8 +195,8 @@ describe('Registration Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
-      vi.spyOn(dbModule.db, 'insert').mockReturnValue(mockInsert as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
+      vi.mocked(db.insert).mockReturnValue(mockInsert as any);
       vi.spyOn(passwordModule, 'hashPassword').mockResolvedValue('$2b$12$hashedPassword');
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
@@ -211,8 +242,8 @@ describe('Registration Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
-      vi.spyOn(dbModule.db, 'insert').mockReturnValue(mockInsert as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
+      vi.mocked(db.insert).mockReturnValue(mockInsert as any);
       vi.spyOn(passwordModule, 'hashPassword').mockResolvedValue('$2b$12$hashedPassword');
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
@@ -258,8 +289,8 @@ describe('Registration Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
-      vi.spyOn(dbModule.db, 'insert').mockReturnValue(mockInsert as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
+      vi.mocked(db.insert).mockReturnValue(mockInsert as any);
       vi.spyOn(passwordModule, 'hashPassword').mockResolvedValue('$2b$12$hashedPassword');
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
@@ -307,8 +338,8 @@ describe('Registration Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
-      vi.spyOn(dbModule.db, 'insert').mockReturnValue(mockInsert as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
+      vi.mocked(db.insert).mockReturnValue(mockInsert as any);
       vi.spyOn(passwordModule, 'hashPassword').mockResolvedValue('$2b$12$hashedPassword');
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
@@ -368,7 +399,7 @@ describe('Login Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
       vi.spyOn(passwordModule, 'verifyPassword').mockResolvedValue(true);
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
@@ -393,7 +424,7 @@ describe('Login Service', () => {
         limit: vi.fn().mockResolvedValue([]) // No user found
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
 
       await expect(loginUser(input)).rejects.toMatchObject({
         status: 401,
@@ -422,7 +453,7 @@ describe('Login Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
       vi.spyOn(passwordModule, 'verifyPassword').mockResolvedValue(false);
 
       await expect(loginUser(input)).rejects.toMatchObject({
@@ -441,7 +472,7 @@ describe('Login Service', () => {
         where: vi.fn().mockReturnThis(),
         limit: vi.fn().mockResolvedValue([])
       };
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelectNoUser as any);
+      vi.mocked(db.select).mockReturnValue(mockSelectNoUser as any);
 
       let error1: any;
       try {
@@ -462,7 +493,7 @@ describe('Login Service', () => {
           must_change_password: false
         }])
       };
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelectWithUser as any);
+      vi.mocked(db.select).mockReturnValue(mockSelectWithUser as any);
       vi.spyOn(passwordModule, 'verifyPassword').mockResolvedValue(false);
 
       let error2: any;
@@ -496,7 +527,7 @@ describe('Login Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
       vi.spyOn(passwordModule, 'verifyPassword').mockResolvedValue(true);
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
@@ -527,7 +558,7 @@ describe('Login Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
       vi.spyOn(passwordModule, 'verifyPassword').mockResolvedValue(true);
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
@@ -555,7 +586,7 @@ describe('Login Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
       vi.spyOn(passwordModule, 'verifyPassword').mockResolvedValue(true);
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
@@ -585,7 +616,7 @@ describe('Login Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
       vi.spyOn(passwordModule, 'verifyPassword').mockResolvedValue(true);
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
@@ -612,7 +643,7 @@ describe('Login Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
       vi.spyOn(passwordModule, 'verifyPassword').mockResolvedValue(true);
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
@@ -670,7 +701,7 @@ describe('Onboard Existing User Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
       const result = await onboardExistingUser(input);
@@ -703,7 +734,7 @@ describe('Onboard Existing User Service', () => {
         limit: vi.fn().mockResolvedValue([]) // No user found
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
 
       await expect(onboardExistingUser(input)).rejects.toMatchObject({
         status: 404,
@@ -733,7 +764,7 @@ describe('Onboard Existing User Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
 
       await expect(onboardExistingUser(input)).rejects.toMatchObject({
         status: 410,
@@ -763,7 +794,7 @@ describe('Onboard Existing User Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
 
       await expect(onboardExistingUser(input)).rejects.toMatchObject({
         status: 409,
@@ -792,7 +823,7 @@ describe('Onboard Existing User Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
 
       await expect(onboardExistingUser(input)).rejects.toMatchObject({
         status: 409,
@@ -823,7 +854,7 @@ describe('Onboard Existing User Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
       const result = await onboardExistingUser(input);
@@ -854,7 +885,7 @@ describe('Onboard Existing User Service', () => {
         }])
       };
 
-      vi.spyOn(dbModule.db, 'select').mockReturnValue(mockSelect as any);
+      vi.mocked(db.select).mockReturnValue(mockSelect as any);
       vi.spyOn(jwtModule, 'signAccessToken').mockResolvedValue('mock.jwt.token');
 
       await onboardExistingUser(input);

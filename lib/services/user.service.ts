@@ -1,8 +1,9 @@
 import { db } from '../db/connection';
 import { users, type User } from '@/lib/shared/db';
 import { hashPassword } from '../password';
-import type { SetPasswordInput, CompleteProfileInput } from '@/lib/shared';
+import type { SetPasswordInput, CompleteProfileInput, UpdateProfileInput } from '@/lib/shared';
 import { eq } from 'drizzle-orm';
+import { del } from '@vercel/blob';
 
 // ============================================================================
 // USER SERVICE (Profile and Password Management)
@@ -206,4 +207,156 @@ export async function completeProfile(userId: number, input: CompleteProfileInpu
     user: userWithoutPassword,
     showConfetti: true // Always show confetti on completion
   };
+}
+
+// ============================================================================
+// UPDATE PROFILE SERVICE (Story 1.6: Profile Management)
+// ============================================================================
+//
+// This service handles profile updates for all users after onboarding
+// Users can update: firstName, lastName, nickname
+// Profile image upload is handled separately via dedicated endpoint
+//
+// SECURITY NOTES:
+// - User must be authenticated (JWT validation in API route)
+// - Only user can update their own profile
+// - password_hash NEVER returned in response
+//
+// ============================================================================
+
+/**
+ * Update user profile fields
+ *
+ * @param userId - The authenticated user's ID
+ * @param input - Profile fields to update (firstName, lastName, nickname)
+ * @returns Promise<UserResponse> - Updated user without sensitive fields
+ * @throws ProblemDetails if user not found (404)
+ *
+ * @example
+ * const updatedUser = await updateProfile(userId, {
+ *   firstName: 'Max',
+ *   lastName: 'Mustermann',
+ *   nickname: 'Maxi'
+ * });
+ */
+export async function updateProfile(userId: number, input: UpdateProfileInput): Promise<UserResponse> {
+  // 1. Find user
+  const [existingUser] = await db.select().from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+
+  if (!existingUser) {
+    const error: ProblemDetails = {
+      type: 'https://urc-falke.app/errors/user-not-found',
+      title: 'Benutzer nicht gefunden',
+      status: 404,
+      detail: 'Der Benutzer wurde nicht gefunden.'
+    };
+    throw error;
+  }
+
+  // 2. Build update object (only provided fields)
+  const updateData: Record<string, unknown> = { updated_at: new Date() };
+
+  if (input.firstName !== undefined) {
+    updateData.first_name = input.firstName;
+  }
+  if (input.lastName !== undefined) {
+    updateData.last_name = input.lastName;
+  }
+  if (input.nickname !== undefined) {
+    updateData.nickname = input.nickname;
+  }
+
+  // 3. Update database
+  const [updatedUser] = await db.update(users)
+    .set(updateData)
+    .where(eq(users.id, userId))
+    .returning();
+
+  // 4. Return WITHOUT password_hash (SECURITY)
+  const { password_hash, ...userWithoutPassword } = updatedUser;
+  return userWithoutPassword;
+}
+
+// ============================================================================
+// DELETE USER ACCOUNT SERVICE (Story 1.8: DSGVO Account Deletion)
+// ============================================================================
+//
+// This service handles complete account deletion for DSGVO compliance
+// (Right to be forgotten / Recht auf Vergessenwerden)
+//
+// MVP SCOPE:
+// - Delete profile image from Vercel Blob Storage (if exists)
+// - Delete user record from database
+//
+// FUTURE SCOPE (when tables exist):
+// - Delete event_participants (Epic 2)
+// - Delete photos (Epic 5)
+// - Delete tour_reports (Epic 5)
+// - Delete comments (Epic 5)
+// - Anonymize audit logs (Epic 3)
+// - Retain donation records 10 years, anonymized (Epic 7)
+//
+// SECURITY NOTES:
+// - User must be authenticated (JWT validation in API route)
+// - Only user can delete their own account
+// - Profile image deletion is best-effort (continues on failure)
+//
+// ============================================================================
+
+/**
+ * Delete user account result
+ */
+export interface DeleteUserAccountResult {
+  success: boolean;
+}
+
+/**
+ * Delete user account and all associated data (DSGVO compliance)
+ *
+ * @param userId - The authenticated user's ID
+ * @returns Promise<DeleteUserAccountResult> - Success status
+ * @throws ProblemDetails if user not found (404)
+ *
+ * @example
+ * const result = await deleteUserAccount(userId);
+ * // Returns: { success: true }
+ */
+export async function deleteUserAccount(userId: number): Promise<DeleteUserAccountResult> {
+  // 1. Find user to check profile image
+  const [existingUser] = await db.select({
+    id: users.id,
+    profile_image_url: users.profile_image_url
+  }).from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+
+  if (!existingUser) {
+    const error: ProblemDetails = {
+      type: 'https://urc-falke.app/errors/user-not-found',
+      title: 'Benutzer nicht gefunden',
+      status: 404,
+      detail: 'Der Benutzer wurde nicht gefunden.',
+      instance: '/api/v1/users/me'
+    };
+    throw error;
+  }
+
+  // 2. Delete profile image from Vercel Blob Storage (if exists)
+  // Best-effort: continue with user deletion even if image deletion fails
+  if (existingUser.profile_image_url) {
+    try {
+      await del(existingUser.profile_image_url);
+    } catch (error) {
+      console.warn('[ACCOUNT_DELETE] Failed to delete profile image:', error);
+      // Continue with user deletion
+    }
+  }
+
+  // 3. Delete user record from database
+  // Future: Add cascade deletes for event_participants, photos, tour_reports, comments
+  await db.delete(users).where(eq(users.id, userId));
+
+  return { success: true };
 }

@@ -2,8 +2,9 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
 // ============================================================================
 // LOGIN PAGE
@@ -19,8 +20,10 @@ import { useRouter } from 'next/navigation'
 //
 // ============================================================================
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const resetSuccess = searchParams.get('reset') === 'success'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -80,6 +83,14 @@ export default function LoginPage() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {resetSuccess && (
+              <div role="alert" className="rounded-md bg-green-50 border border-green-200 p-4">
+                <p className="text-sm text-green-800">
+                  Dein Passwort wurde erfolgreich geändert. Bitte melde dich mit deinem neuen Passwort an.
+                </p>
+              </div>
+            )}
+
             {error && (
               <div className="rounded-md bg-red-50 p-4">
                 <p className="text-sm text-red-800">{error}</p>
@@ -103,9 +114,14 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Passwort
-              </label>
+              <div className="flex justify-between items-center">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Passwort
+                </label>
+                <Link href="/forgot-password" className="text-sm text-blue-600 hover:text-blue-500">
+                  Passwort vergessen?
+                </Link>
+              </div>
               <input
                 id="password"
                 name="password"
@@ -135,5 +151,14 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Wrap with Suspense for useSearchParams
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">Lädt...</div>}>
+      <LoginForm />
+    </Suspense>
   )
 }
